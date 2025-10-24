@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-lang="heroTitle">ĀtmaAahar - Intelligent Wellness</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base font */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        /* Hide number input arrows */
+        input[type='number']::-webkit-inner-spin-button,
+        input[type='number']::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type='number'] {
+            -moz-appearance: textfield;
+        }
+
+        /* Quiz progress bar */
+        .quiz-progress-bar div {
+            transition: width 0.4s ease-in-out;
+        }
+
+        /* Selected quiz option style */
+        .quiz-option.selected {
+            border-color: #fb923c; /* Saffron Orange */
+            background-color: #fff7ed;
+            box-shadow: 0 4px 12px rgba(251, 146, 60, 0.1);
+        }
+
+        /* Meal tag icons */
+        .meal-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-right: 6px;
+            margin-bottom: 6px;
+        }
+
+        /* Modal transitions */
+        .modal-enter {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: all 0.2s ease-out;
+        }
+
+        .modal-leave {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .modal-leave-active {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.2s ease-in;
+        }
+
+        .modal-backdrop-enter {
+            opacity: 0;
+        }
+
+        .modal-backdrop-enter-active {
+            opacity: 1;
+            transition: opacity 0.2s ease-out;
+        }
+
+        .modal-backdrop-leave {
+            opacity: 1;
+        }
+
+        .modal-backdrop-leave-active {
+            opacity: 0;
+            transition: opacity 0.2s ease-in;
+        }
+
+        /* Language Dropdown */
+        #languageDropdown {
+            display: none;
+            /* Hidden by default */
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- App Container -->
+    <div id="app" class="min-h-screen">
+
+        <!-- Header -->
+        <header class="bg-white shadow-sm sticky top-0 z-40">
+            <nav class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="#" id="homeLink" class="flex items-center space-x-2">
+                    <span class="text-3xl font-bold text-green-700">Ā</span>
+                    <span class="text-2xl font-bold text-gray-800">ĀtmaAahar</span>
+                </a>
+
+                <!-- Language Selector -->
+                <div class="relative">
+                    <button id="languageToggle" class="flex items-center space-x-1 px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-700">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C13.18 7.061 14.288 7.5 15.5 7.5c1.212 0 2.32-.439 3.166-1.136m0 0V3m-3.166 2.364l.002.001" />
+                        </svg>
+                        <span id="languageToggleText" data-lang="langEnglish">English</span>
+                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div id="languageDropdown" class="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg border border-gray-200 z-50">
+                        <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="languageToggle">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" data-lang-code="en" data-lang-key="langEnglish">English</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" data-lang-code="hi" data-lang-key="langHindi">हिन्दी</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" data-lang-code="bn" data-lang-key="langBengali">বাংলা</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" data-lang-code="ta" data-lang-key="langTamil">தமிழ்</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content Area -->
+        <main>
+            <!-- Page: Landing -->
+            <section id="page-landing" class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
+                <!-- Hero Section -->
+                <div class="text-center max-w-3xl mx-auto">
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight" data-lang="heroTitle">
+                        Rediscover Wellness. <br>Your Plate, Your Way.
+                    </h1>
+                    <p class="mt-6 text-lg sm:text-xl text-gray-600" data-lang="heroSubtitle">
+                        ĀtmaAahar fuses modern science with Ayurvedic wisdom to create free, hyper-personalized diet plans from local Indian ingredients.
+                    </p>
+                    <button id="startQuizBtn" class="mt-10 px-8 py-3 bg-green-700 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-green-800 transition duration-300 transform hover:scale-105" data-lang="createPlanBtn">
+                        Create My Free Plan
+                    </button>
+                </div>
+
+                <!-- How It Works Section -->
+                <div class="mt-20 sm:mt-32 max-w-5xl mx-auto">
+                    <h2 class="text-3xl font-bold text-center text-gray-900" data-lang="howItWorksTitle">Wellness in 3 Simple Steps</h2>
+                    <p class="text-lg text-center text-gray-600 mt-3" data-lang="howItWorksSubtitle">Your journey to a healthier you starts here.</p>
+                    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                        <!-- Step 1 -->
+                        <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                            <div class="flex items-center justify-center h-16 w-16 bg-green-100 text-green-700 rounded-full mx-auto">
+                                <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" />
+                                </svg>
+                            </div>
+                            <h3 class="mt-5 text-xl font-semibold text-gray-900" data-lang="step1Title">1. Take the Discovery Quiz</h3>
+                            <p class="mt-2 text-gray-600" data-lang="step1Desc">Tell us your goals, lifestyle, and preferences. We'll identify your unique Ayurvedic dosha.</p>
+                        </div>
+                        <!-- Step 2 -->
+                        <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                            <div class="flex items-center justify-center h-16 w-16 bg-green-100 text-green-700 rounded-full mx-auto">
+                                <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+                                </svg>
+                            </div>
+                            <h3 class="mt-5 text-xl font-semibold text-gray-900" data-lang="step2Title">2. Get Your AI-Powered Plan</h3>
+                            <p class="mt-2 text-gray-600" data-lang="step2Desc">Our intelligent engine crafts a 7-day meal plan using local, seasonal ingredients.</p>
+                        </div>
+                        <!-- Step 3 -->
+                        <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                            <div class="flex items-center justify-center h-16 w-16 bg-green-100 text-green-700 rounded-full mx-auto">
+                                <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
+                                </svg>
+                            </div>
+                            <h3 class="mt-5 text-xl font-semibold text-gray-900" data-lang="step3Title">3. Thrive & Achieve</h3>
+                            <p class="mt-2 text-gray-600" data-lang="step3Desc">Follow your plan, tweak meals as you like, and feel the difference in your well-being.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Page: Quiz -->
+            <section id="page-quiz" class="hidden bg-white">
+                <div class="min-h-screen flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+                    <div class="max-w-xl w-full space-y-8">
+                        <div>
+                            <h2 class="mt-6 text-center text-3xl font-bold text-gray-900" data-lang="quizTitle">
+                                Your Discovery Quiz
+                            </h2>
+                            <p class="mt-2 text-center text-sm text-gray-600" data-lang="quizSubtitle">
+                                Let's get to know you better to create your perfect plan.
+                            </p>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div id="quiz-progress" class="quiz-progress-bar bg-green-600 h-2.5 rounded-full" style="width: 20%"></div>
+                        </div>
+
+                        <!-- Quiz Form -->
+                        <form id="quiz-form" class="mt-8 space-y-6">
+                            <input type="hidden" id="quiz-step" value="1">
+
+                            <!-- Step 1: Personal Details -->
+                            <div id="quiz-step-1" class="rounded-md shadow-sm -space-y-px">
+                                <h3 class="font-semibold text-lg text-gray-800 mb-4" data-lang="q1Title">Personal Details</h3>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="age" class="block text-sm font-medium text-gray-700" data-lang="q1Age">Age</label>
+                                        <input id="age" name="age" type="number" required class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="Your age">
+                                    </div>
+                                    <div>
+                                        <label for="gender" class="block text-sm font-medium text-gray-700" data-lang="q1Gender">Gender</label>
+                                        <select id="gender" name="gender" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 mt-4">
+                                    <div>
+                                        <label for="height" class="block text-sm font-medium text-gray-700" data-lang="q1Height">Height (cm)</label>
+                                        <input id="height" name="height" type="number" required class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="e.g., 170">
+                                    </div>
+                                    <div>
+                                        <label for="weight" class="block text-sm font-medium text-gray-700" data-lang="q1Weight">Weight (kg)</label>
+                                        <input id="weight" name="weight" type="number" required class="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="e.g., 65">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Goal -->
+                            <div id="quiz-step-2" class="hidden space-y-4">
+                                <h3 class="font-semibold text-lg text-gray-800" data-lang="q2Title">What's your primary goal?</h3>
+                                <div class="quiz-option p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50" data-field="goal" data-value="health">
+                                    <strong class="text-green-800" data-lang="q2Opt1a">Health Management:</strong>
+                                    <span class="text-gray-600" data-lang="q2Opt1b"> Manage Diabetes, PCOS, Thyroid, etc.</span>
+                                </div>
+                                <div class="quiz-option p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50" data-field="goal" data-value="professional">
+                                    <strong class="text-green-800" data-lang="q2Opt2a">Busy Professional:</strong>
+                                    <span class="text-gray-600" data-lang="q2Opt2b"> Convenient & healthy solutions.</span>
+                                </div>
+                                <div class="quiz-option p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50" data-field="goal" data-value="fitness">
+                                    <strong class="text-green-800" data-lang="q2Opt3a">Fitness Enthusiast:</strong>
+                                    <span class="text-gray-600" data-lang="q2Opt3b"> Muscle gain, fat loss, or toning.</span>
+                                </div>
+                                <div class="quiz-option p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50" data-field="goal" data-value="athlete">
+                                    <strong class="text-green-800" data-lang="q2Opt4a">Athlete/Sportsperson:</strong>
+                                    <span class="text-gray-600" data-lang="q2Opt4b"> Performance-oriented nutrition.</span>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Diet -->
+                            <div id="quiz-step-3" class="hidden space-y-4">
+                                <h3 class="font-semibold text-lg text-gray-800" data-lang="q3Title">Dietary Preferences</h3>
+                                <div class="quiz-option p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50" data-field="diet" data-value="veg">
+                                    <span data-lang="q3Opt1">Vegetarian</span>
+                                </div>
+                                <div class="quiz-option p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50" data-field="diet" data-value="non-veg">
+                                    <span data-lang="q3Opt2">Non-Vegetarian</span>
+                                </div>
+                                <div class="quiz-option p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50" data-field="diet" data-value="vegan">
+                                    <span data-lang="q3Opt3">Vegan</span>
+                                </div>
+                                <div class="quiz-option p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50" data-field="diet" data-value="jain">
+                                    <span data-lang="q3Opt4">Jain</span>
+                                </div>
+                            </div>
+
+                            <!-- Step 4: Dosha -->
+                            <div id="quiz-step-4" class="hidden space-y-4">
+                                <h3 class="font-semibold text-lg text-gray-800" data-lang="q4Title">How would you describe your body frame & energy?</h3>
+                                <div class="quiz-option p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50" data-field="dosha" data-value="vata">
+                                    <span data-lang="q4Opt1">Light, thin, energetic, find it hard to gain weight. (Vata)</span>
+                                </div>
+                                <div class="quiz-option p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50" data-field="dosha" data-value="pitta">
+                                    <span data-lang="q4Opt2">Medium build, muscular, sharp, good metabolism. (Pitta)</span>
+                                </div>
+                                <div class="quiz-option p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50" data-field="dosha" data-value="kapha">
+                                    <span data-lang="q4Opt3">Sturdy, well-built, calm, can gain weight easily. (Kapha)</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 5: Region & Budget -->
+                            <div id="quiz-step-5" class="hidden space-y-4">
+                                <h3 class="font-semibold text-lg text-gray-800" data-lang="q5Title">Location & Budget</h3>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="region" class="block text-sm font-medium text-gray-700" data-lang="q5Region">Your Region</label>
+                                        <select id="region" name="region" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                                            <option value="north" data-lang="q5OptNorth">North India</option>
+                                            <option value="south" data-lang="q5OptSouth">South India</option>
+                                            <option value="east" data-lang="q5OptEast">East India</option>
+                                            <option value="west" data-lang="q5OptWest">West India</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="budget" class="block text-sm font-medium text-gray-700" data-lang="q5Budget">Weekly Budget</label>
+                                        <select id="budget" name="budget" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                                            <option value="low" data-lang="q5OptLow">Low</option>
+                                            <option value="medium" data-lang="q5OptMedium">Medium</option>
+                                            <option value="high" data-lang="q5OptHigh">High</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Step 6: Loading -->
+                            <div id="quiz-step-6" class="hidden text-center">
+                                <div class="flex justify-center items-center mb-4">
+                                    <svg class="animate-spin -ml-1 mr-3 h-10 w-10 text-green-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="font-semibold text-lg text-gray-800" data-lang="q6Title">Crafting Your Perfect Plan...</h3>
+                                <p class="text-gray-600 mt-2" data-lang="q6Desc">Our AI is analyzing your inputs to build a personalized wellness journey just for you.</p>
+                            </div>
+                        </form>
+
+                        <!-- Navigation -->
+                        <div id="quiz-nav" class="flex justify-between">
+                            <button id="quiz-back" class="px-6 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed" data-lang="btnBack">
+                                Back
+                            </button>
+                            <button id="quiz-next" class="px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-700 hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span data-lang="btnNext">Next</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Page: Dashboard -->
+            <section id="page-dashboard" class="hidden container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                
+                <!-- Dashboard Header -->
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <h1 class="text-3xl font-bold text-gray-900" data-lang="welcomeMessage">Welcome!</h1>
+                    <p class="text-lg text-gray-600 mt-2">
+                        <span data-lang="goalFocus">Here is your plan, designed for your goal: </span>
+                        <strong id="dashboard-goal-focus" class="text-green-800">...</strong>
+                    </p>
+                    <div class="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <h4 class="font-semibold text-gray-800" data-lang="prefsTitle">Your Plan Preferences:</h4>
+                        <div class="flex flex-wrap gap-x-6 gap-y-2 mt-2 text-sm text-gray-700">
+                            <span class="flex items-center"><strong data-lang="prefGoal" class="mr-1.5">Goal:</strong> <span id="pref-goal-val"></span></span>
+                            <span class="flex items-center"><strong data-lang="prefRegion" class="mr-1.5">Region:</strong> <span id="pref-region-val"></span></span>
+                            <span class="flex items-center"><strong data-lang="prefBudget" class="mr-1.5">Budget:</strong> <span id="pref-budget-val"></span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900" data-lang="dashboardTitle">Your Weekly Plan</h2>
+                    <button id="shoppingListBtn" class="px-4 py-2 bg-saffron-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-saffron-700 transition duration-300" data-lang="btnShoppingList">
+                        Generate Shopping List
+                    </button>
+                </div>
+
+                <!-- Daily Plan Cards -->
+                <div id="dashboard-plan-container" class="space-y-6">
+                    <!-- Cards will be dynamically inserted here -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-white border-t border-gray-200 mt-20">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-gray-500">
+                <p>&copy; 2025 ĀtmaAahar. All rights reserved.</p>
+                <div class="flex justify-center space-x-6 mt-4 text-sm">
+                    <a href="#" class="hover:text-gray-900" data-lang="footerAbout">About Us</a>
+                    <a href="#" class="hover:text-gray-900" data-lang="footerPrivacy">Privacy Policy</a>
+                    <a href="#" class="hover:text-gray-900" data-lang="footerContact">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal: Tweak Meal -->
+    <div id="tweakModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4 hidden modal-backdrop-enter">
+        <div class="modal-content bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col modal-enter">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center p-4 border-b border-gray-200">
+                <h3 class="text-xl font-semibold text-gray-900" data-lang="tweakTitle">Swap Your Meal</h3>
+                <button id="closeTweakModal" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="p-6 overflow-y-auto">
+                <p class="text-gray-600 mb-4">
+                    <span data-lang="tweakDesc">Here are a few nutritionally similar alternatives for</span>
+                    <strong id="tweak-meal-name" class="text-green-800">...</strong>
+                </p>
+                <div id="tweak-options-container" class="space-y-3">
+                    <!-- Tweak options will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal: Shopping List -->
+    <div id="shoppingListModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4 hidden modal-backdrop-enter">
+        <div class="modal-content bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col modal-enter">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center p-4 border-b border-gray-200">
+                <h3 class="text-xl font-semibold text-gray-900" data-lang="shoppingListTitle">Your Weekly Shopping List</h3>
+                <button id="closeShoppingListModal" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div id="shopping-list-content" class="p-6 overflow-y-auto">
+                <!-- Shopping list content will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal: Recipe / Day Details -->
+    <div id="recipeModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4 hidden modal-backdrop-enter">
+        <div class="modal-content bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col modal-enter">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center p-4 border-b border-gray-200">
+                <h3 id="recipe-modal-title" class="text-xl font-semibold text-gray-900">...</h3>
+                <button id="closeRecipeModal" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div id="recipe-modal-content" class="p-6 overflow-y-auto space-y-6">
+                <!-- Recipe/Day details will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- TAILWIND CONFIG ---
+            // Customizing Tailwind to add our brand colors
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            'saffron': {
+                                50: '#fffbeb',
+                                100: '#fef3c7',
+                                200: '#fde68a',
+                                300: '#fcd34d',
+                                400: '#fbbf24',
+                                500: '#f59e0b',
+                                600: '#d97706',
+                                700: '#b45309',
+                                800: '#92400e',
+                                900: '#78350f',
+                            },
+                            'sage': {
+                                50: '#f0fdf4',
+                                100: '#dcfce7',
+                                200: '#bbf7d0',
+                                300: '#86efac',
+                                400: '#4ade80',
+                                500: '#22c55e',
+                                600: '#16a34a',
+                                700: '#15803d',
+                                800: '#166534',
+                                900: '#14532d',
+                            },
+                            'turmeric': {
+                                50: '#fffbeb',
+                                100: '#fef3c7',
+                                200: '#fde68a',
+                                300: '#fcd34d',
+                                400: '#fbbf24',
+                                500: '#f59e0b',
+                                600: '#d97706',
+                                700: '#b45309',
+                                800: '#92400e',
+                                900: '#78350f',
+                            }
+                        },
+                    }
+                }
+            }
+
+            // --- TRANSLATION DICTIONARY & TONE ENGINE ---
+            const translations = {
+                en: {
+                    langEnglish: "English", langHindi: "Hindi", langBengali: "Bengali", langTamil: "Tamil",
+                    heroTitle: "Rediscover Wellness. Your Plate, Your Way.", heroSubtitle: "ĀtmaAahar fuses modern science with Ayurvedic wisdom to create free, hyper-personalized diet plans from local Indian ingredients.", createPlanBtn: "Create My Free Plan", howItWorksTitle: "Wellness in 3 Simple Steps", howItWorksSubtitle: "Your journey to a healthier you starts here.", step1Title: "1. Take the Discovery Quiz", step1Desc: "Tell us your goals, lifestyle, and preferences. We'll identify your unique Ayurvedic dosha.", step2Title: "2. Get Your AI-Powered Plan", step2Desc: "Our intelligent engine crafts a 7-day meal plan using local, seasonal ingredients.", step3Title: "3. Thrive & Achieve", step3Desc: "Follow your plan, tweak meals as you like, and feel the difference in your well-being.",
+                    quizTitle: "Your Discovery Quiz", quizSubtitle: "Let's get to know you better to create your perfect plan.", q1Title: "Personal Details", q1Age: "Age", q1Gender: "Gender", q1Height: "Height (cm)", q1Weight: "Weight (kg)", q2Title: "What's your primary goal?", q2Opt1a: "Health Management:", q2Opt1b: " Manage Diabetes, PCOS, Thyroid, etc.", q2Opt2a: "Busy Professional:", q2Opt2b: " Convenient & healthy solutions.", q2Opt3a: "Fitness Enthusiast:", q2Opt3b: " Muscle gain, fat loss, or toning.", q2Opt4a: "Athlete/Sportsperson:", q2Opt4b: " Performance-oriented nutrition.", q3Title: "Dietary Preferences", q3Opt1: "Vegetarian", q3Opt2: "Non-Vegetarian", q3Opt3: "Vegan", q3Opt4: "Jain", q4Title: "How would you describe your body frame & energy?", q4Opt1: "Light, thin, energetic, find it hard to gain weight. (Vata)", q4Opt2: "Medium build, muscular, sharp, good metabolism. (Pitta)", q4Opt3: "Sturdy, well-built, calm, can gain weight easily. (Kapha)", q5Title: "Location & Budget", q5Region: "Your Region", q5Budget: "Weekly Budget", q5OptNorth: "North India", q5OptSouth: "South India", q5OptEast: "East India", q5OptWest: "West India", q5OptLow: "Low", q5OptMedium: "Medium", q5OptHigh: "High", q6Title: "Crafting Your Perfect Plan...", q6Desc: "Our AI is analyzing your inputs to build a personalized wellness journey just for you.",
+                    btnBack: "Back", btnNext: "Next", btnGeneratePlan: "Generate My Plan",
+                    dashboardTitle: "Your Weekly Plan", btnShoppingList: "Generate Shopping List", btnDayDetails: "View Day Details",
+                    welcomeMessage: "Welcome!", goalFocus: "Here is your plan, designed for your goal: ", goalFitness: "Focusing on Fitness & Muscle Gain", goalHealth: "Managing Your Health Condition", goalProfessional: "Fueling Your Busy Schedule", goalAthlete: "Optimizing Your Athletic Performance",
+                    prefsTitle: "Your Plan Preferences:", prefGoal: "Goal", prefRegion: "Region", prefBudget: "Budget",
+                    tweakTitle: "Swap Your Meal", tweakDesc: "Here are a few nutritionally similar alternatives for", shoppingListTitle: "Your Weekly Shopping List", recipeIngredients: "Ingredients", recipePreparation: "Preparation",
+                    footerAbout: "About Us", footerPrivacy: "Privacy Policy", footerContact: "Contact",
+                    mealTypes: { breakfast: "Breakfast", lunch: "Lunch", snack: "Snack", dinner: "Dinner" },
+                    dailySummary: "Daily Summary for",
+                },
+                hi: {
+                    langEnglish: "अंग्रेज़ी", langHindi: "हिन्दी", langBengali: "बंगाली", langTamil: "तमिल",
+                    heroTitle: "स्वस्थ जीवन का आधार, आपका अपना आहार। आपकी सेहत, आपकी थाली।", heroSubtitle: "आत्मआहार आधुनिक विज्ञान को आयुर्वेदिक ज्ञान के साथ मिलाकर स्थानीय भारतीय सामग्री से मुफ्त, हाइपर-व्यक्तिगत आहार योजनाएँ बनाता है।", createPlanBtn: "मेरी मुफ्त योजना बनाएं", howItWorksTitle: "3 सरल चरणों में कल्याण", howItWorksSubtitle: "एक स्वस्थ जीवन की ओर आपकी यात्रा यहाँ से शुरू होती है।", step1Title: "१. खोज प्रश्नोत्तरी लें", step1Desc: "हमें अपने लक्ष्य, जीवनशैली और प्राथमिकताएं बताएं। हम आपके अद्वितीय आयुर्वेदिक दोष की पहचान करेंगे।", step2Title: "२. अपनी AI-संचालित योजना प्राप्त करें", step2Desc: "हमारा इंटेलिजेंट इंजन स्थानीय, मौसमी सामग्री का उपयोग करके ७-दिवसीय भोजन योजना तैयार करता है।", step3Title: "३. सफल हों और प्राप्त करें", step3Desc: "अपनी योजना का पालन करें, अपनी पसंद के अनुसार भोजन में बदलाव करें, और अपनी सेहत में अंतर महसूस करें।",
+                    quizTitle: "आपकी खोज प्रश्नोत्तरी", quizSubtitle: "आपकी उत्तम योजना बनाने के लिए, आइए आपको बेहतर तरीके से जानें।", q1Title: "व्यक्तिगत विवरण", q1Age: "आयु", q1Gender: "लिंग", q1Height: "ऊंचाई (सेमी)", q1Weight: "वजन (किग्रा)", q2Title: "आपका प्राथमिक लक्ष्य क्या है?", q2Opt1a: "स्वास्थ्य प्रबंधन:", q2Opt1b: " मधुमेह, पीसीओएस, थायराइड, आदि का प्रबंधन करें।", q2Opt2a: "व्यस्त पेशेवर:", q2Opt2b: " सुविधाजनक और स्वस्थ समाधान।", q2Opt3a: "फिटनेस उत्साही:", q2Opt3b: " मांसपेशियों का विकास, वसा घटाना, या टोनिंग।", q2Opt4a: "एथलीट/खिलाड़ी:", q2Opt4b: " प्रदर्शन-उन्मुख पोषण।", q3Title: "आहार संबंधी प्राथमिकताएँ", q3Opt1: "शाकाहारी", q3Opt2: "मांसाहारी", q3Opt3: "वेगन", q3Opt4: "जैन", q4Title: "आप अपने शरीर की बनावट और ऊर्जा का वर्णन कैसे करेंगे?", q4Opt1: "हल्का, पतला, ऊर्जावान, वजन बढ़ाना मुश्किल लगता है। (वात)", q4Opt2: "मध्यम बनावट, मांसल, तेज, अच्छा चयापचय। (पित्त)", q4Opt3: "मजबूत, सुगठित, शांत, आसानी से वजन बढ़ सकता है। (कफ)", q5Title: "स्थान और बजट", q5Region: "आपका क्षेत्र", q5Budget: "साप्ताहिक बजट", q5OptNorth: "उत्तर भारत", q5OptSouth: "दक्षिण भारत", q5OptEast: "पूर्वी भारत", q5OptWest: "पश्चिम भारत", q5OptLow: "कम", q5OptMedium: "मध्यम", q5OptHigh: "उच्च", q6Title: "आपकी उत्तम योजना तैयार की जा रही है...", q6Desc: "हमारा AI आपके लिए एक व्यक्तिगत कल्याण यात्रा बनाने के लिए आपके इनपुट का विश्लेषण कर रहा है।",
+                    btnBack: "वापस", btnNext: "अगला", btnGeneratePlan: "मेरी योजना बनाएं",
+                    dashboardTitle: "आपकी साप्ताहिक योजना", btnShoppingList: "खरीदारी की सूची बनाएं", btnDayDetails: "दिन का विवरण देखें",
+                    welcomeMessage: "आपका स्वागत है!", goalFocus: "यह रही आपकी योजना, जिसे आपके लक्ष्य के लिए डिज़ाइन किया गया है: ", goalFitness: "फिटनेस और मांसपेशियों के विकास पर ध्यान केंद्रित करना", goalHealth: "आपकी स्वास्थ्य स्थिति का प्रबंधन करना", goalProfessional: "आपकी व्यस्त दिनचर्या को ऊर्जा देना", goalAthlete: "आपके एथलेटिक प्रदर्शन का अनुकूलन करना",
+                    prefsTitle: "आपकी योजना प्राथमिकताएँ:", prefGoal: "लक्ष्य", prefRegion: "क्षेत्र", prefBudget: "बજેट",
+                    tweakTitle: "अपना भोजन बदलें", tweakDesc: "यहाँ कुछ पोषण की दृष्टि से समान विकल्प दिए गए हैं", shoppingListTitle: "आपकी साप्ताहिक खरीदारी सूची", recipeIngredients: "सामग्री", recipePreparation: "तैयारी",
+                    footerAbout: "हमारे बारे में", footerPrivacy: "गोपनीयता नीति", footerContact: "संपर्क करें",
+                    mealTypes: { breakfast: "नाश्ता", lunch: "दोपहर का भोजन", snack: "स्नैक", dinner: "रात का खाना" },
+                    dailySummary: "के लिए दैनिक सारांश",
+                },
+                bn: {
+                    langEnglish: "ইংরেজী", langHindi: "হিন্দি", langBengali: "বাংলা", langTamil: "তামিল",
+                    heroTitle: "সুস্থতা পুনরায় আবিষ্কার করুন। আপনার প্লেট, আপনার উপায়।", heroSubtitle: "আত্মাহার আধুনিক বিজ্ঞানকে আয়ুর্বেদিক জ্ঞানের সাথে মিশিয়ে স্থানীয় ভারতীয় উপাদান দিয়ে বিনামূল্যে, হাইপার-পার্সোনালাইজড ডায়েট প্ল্যান তৈরি করে।", createPlanBtn: "আমার বিনামূল্যে প্ল্যান তৈরি করুন", howItWorksTitle: "৩টি সহজ ধাপে সুস্থতা", howItWorksSubtitle: "আপনার সুস্থতার দিকে যাত্রা এখান থেকে শুরু।", step1Title: "১. ডিসকভারি কুইজ নিন", step1Desc: "আপনার লক্ষ্য, জীবনধারা এবং পছন্দগুলি আমাদের বলুন। আমরা আপনার অনন্য আয়ুর্বেদিক দোষ চিহ্নিত করব।", step2Title: "২. আপনার AI-চালিত প্ল্যান পান", step2Desc: "আমাদের ইন্টেলিজENT ইঞ্জিন স্থানীয়, মৌসুমী উপাদান ব্যবহার করে ৭ দিনের খাবারের প্ল্যান তৈরি করে।", step3Title: "৩. উন্নতি করুন এবং অর্জন করুন", step3Desc: "আপনার প্ল্যান অনুসরণ করুন, আপনার পছন্দ মতো খাবার পরিবর্তন করুন এবং আপনার সুস্থতার পার্থক্য অনুভব করুন।",
+                    quizTitle: "আপনার ডিসকভারি কুইজ", quizSubtitle: "আপনার নিখুঁত পরিকল্পনা তৈরি করতে আসুন আপনাকে আরও ভালভাবে জেনে নিই।", q1Title: "ব্যক্তিগত বিবরণ", q1Age: "বয়স", q1Gender: "লিঙ্গ", q1Height: "উচ্চতা (সেমি)", q1Weight: "ওজন (কেজি)", q2Title: "আপনার প্রাথমিক লক্ষ্য কী?", q2Opt1a: "স্বাস্থ্য পরিচালনা:", q2Opt1b: " ডায়াবেটিস, PCOS, থাইরয়েড ইত্যাদি পরিচালনা করুন।", q2Opt2a: "ব্যস্ত পেশাদার:", q2Opt2b: " সুবিধাজনক এবং স্বাস্থ্যকর সমাধান।", q2Opt3a: "ফিটনেস উৎসাহী:", q2Opt3b: " পেশী বৃদ্ধি, চর্বি হ্রাস, বা টোনিং।", q2Opt4a: "ক্রীড়াবিদ/খেলোয়াড়:", q2Opt4b: " কর্মক্ষমতা-ভিত্তিক পুষ্টি।", q3Title: "খাদ্য পছন্দ", q3Opt1: "নিরামিষ", q3Opt2: "আমিষ", q3Opt3: "ভেগান", q3Opt4: "জৈন", q4Title: "আপনি আপনার শরীরের গঠন এবং শক্তি কীভাবে বর্ণনা করবেন?", q4Opt1: "হালকা, পাতলা, উদ্যমী, ওজন বাড়ানো কঠিন মনে হয়। ( বাত )", q4Opt2: "মাঝারি গড়ন, পেশীবহুল, তীক্ষ্ণ, ভাল বিপাক। ( পিত্ত )", q4Opt3: "শক্তিশালী, সুগঠিত, শান্ত, সহজে ওজন বাড়তে পারে। ( কফ )", q5Title: "অবস্থান এবং বাজেট", q5Region: "আপনার অঞ্চল", q5Budget: "সাপ্তাহিক বাজেট", q5OptNorth: "উত্তর ভারত", q5OptSouth: "দক্ষিণ ভারত", q5OptEast: "পূর্ব ভারত", q5OptWest: "পশ্চিম ভারত", q5OptLow: "কম", q5OptMedium: "মাঝারি", q5OptHigh: "উচ্চ", q6Title: "আপনার নিখুঁত পরিকল্পনা তৈরি করা হচ্ছে...", q6Desc: "আমাদের AI আপনার জন্য একটি ব্যক্তিগতকৃত সুস্থতা যাত্রা তৈরি করতে আপনার ইনপুট বিশ্লেষণ করছে।",
+                    btnBack: "পেছনে", btnNext: "পরবর্তী", btnGeneratePlan: "আমার প্ল্যান তৈরি করুন",
+                    dashboardTitle: "আপনার সাপ্তাহিক পরিকল্পনা", btnShoppingList: "কেনাকাটার তালিকা তৈরি করুন", btnDayDetails: "দিনের বিবরণ দেখুন",
+                    welcomeMessage: "স্বাগতম!", goalFocus: "এই নিন আপনার প্ল্যান, যা আপনার লক্ষ্যের জন্য ডিজাইন করা হয়েছে: ", goalFitness: "ফিটনেস এবং পেশী বৃদ্ধির উপর মনোযোগ കേന്ദ്ര করা", goalHealth: "আপনার স্বাস্থ্য পরিস্থিতি পরিচালনা করা", goalProfessional: "আপনার ব্যস্ত সময়সূচীকে শক্তি জোগানো", goalAthlete: "আপনার ক্রীড়া কর্মক্ষমতা অপ্টিমাইজ করা",
+                    prefsTitle: "আপনার প্ল্যান পছন্দ:", prefGoal: "লক্ষ্য", prefRegion: "অঞ্চল", prefBudget: "বাজেট",
+                    tweakTitle: "আপনার খাবার পরিবর্তন করুন", tweakDesc: "এখানে কিছু পুষ্টিগতভাবে অনুরূপ বিকল্প রয়েছে", shoppingListTitle: "আপনার সাপ্তাহিক কেনাকাটার তালিকা", recipeIngredients: "উপাদান", recipePreparation: "প্রস্তুতি",
+                    footerAbout: "আমাদের সম্পর্কে", footerPrivacy: "গোপনীয়তা নীতি", footerContact: "যোগাযোগ",
+                    mealTypes: { breakfast: "সকালের নাস্তা", lunch: "দুপুরের খাবার", snack: "স্ন্যাক", dinner: "রাতের খাবার" },
+                    dailySummary: "-এর জন্য দৈনিক সারসংক্ষেপ",
+                },
+                ta: {
+                    langEnglish: "ஆங்கிலம்", langHindi: "ஹிந்தி", langBengali: "பெங்காலி", langTamil: "தமிழ்",
+                    heroTitle: "ஆரோக்கியத்தை மீண்டும் கண்டறியுங்கள். உங்கள் தட்டு, உங்கள் வழி.", heroSubtitle: "ஆத்மாஹார் நவீன அறிவியலை ஆயுர்வேத ஞானத்துடன் இணைத்து உள்ளூர் இந்தியப் பொருட்களைக் கொண்டு இலவச, மிகத் தனிப்பயனாக்கப்பட்ட உணவுத் திட்டங்களை உருவாக்குகிறது.", createPlanBtn: "எனது இலவச திட்டத்தை உருவாக்கு", howItWorksTitle: "3 எளிய படிகளில் ஆரோக்கியம்", howItWorksSubtitle: "ஆரோக்கியமான உங்களுக்கான உங்கள் பயணம் இங்கே தொடங்குகிறது.", step1Title: "1. கண்டுபிடிப்பு வினாடி வினாவை எடுக்கவும்", step1Desc: "உங்கள் இலக்குகள், வாழ்க்கை முறை மற்றும் விருப்பங்களை எங்களிடம் கூறுங்கள். உங்கள் தனித்துவமான ஆயுর্வேத தோஷத்தை நாங்கள் அடையாளம் காண்போம்.", step2Title: "2. உங்கள் AI-இயங்கும் திட்டத்தைப் பெறுங்கள்", step2Desc: "எங்கள் அறிவார்ந்த இயந்திரம் உள்ளூர், பருவகாலப் பொருட்களைப் பயன்படுத்தி 7-நாள் உணவுத் திட்டத்தை உருவாக்குகிறது.", step3Title: "3. செழித்து சாதிக்கவும்", step3Desc: "உங்கள் திட்டத்தைப் பின்பற்றவும், உங்கள் விருப்பப்படி உணவைத் திருத்தவும், உங்கள் நல்வாழ்வில் வித்தியாசத்தை உணரவும்.",
+                    quizTitle: "உங்கள் கண்டுபிடிப்பு வினாடி வினா", quizSubtitle: "உங்கள் சரியான திட்டத்தை உருவாக்க உங்களை நன்கு அறிந்து கொள்வோம்.", q1Title: "தனிப்பட்ட விபரங்கள்", q1Age: "வயது", q1Gender: "பாலினம்", q1Height: "உயரம் (செ.மீ)", q1Weight: "எடை (கிலோ)", q2Title: "உங்கள் முதன்மை இலக்கு என்ன?", q2Opt1a: "சுகாதார மேலாண்மை:", q2Opt1b: " நீரிழிவு, பிசிஓஎஸ், தைராய்டு போன்றவற்றை நிர்வகிக்கவும்.", q2Opt2a: "சுறுசுறுப்பான நிபுணர்:", q2Opt2b: " வசதியான மற்றும் ஆரோக்கியமான தீர்வுகள்.", q2Opt3a: "உடற்பயிற்சி ஆர்வலர்:", q2Opt3b: " தசை அதிகரிப்பு, கொழுப்பு இழப்பு, அல்லது டோனிங்.", q2Opt4a: "விளையாட்டு வீரர்:", q2Opt4b: " செயல்திறன் சார்ந்த ஊட்டச்சத்து.", q3Title: "உணவு விருப்பங்கள்", q3Opt1: "சைவம்", q3Opt2: "அசைவம்", q3Opt3: "சைவ உணவு உண்பவர்", q3Opt4: "ஜெயின்", q4Title: "உங்கள் உடல் சட்டகம் மற்றும் ஆற்றலை எவ்வாறு விவரிப்பீர்கள்?", q4Opt1: "இலகுவான, மெல்லிய, ஆற்றல் மிக்க, எடை அதிகரிப்பது கடினம். ( வாதம் )", q4Opt2: "நடுத்தர உருவாக்கம், தசை, கூர்மையான, நல்ல வளர்சிதை மாற்றம். ( பித்தம் )", q4Opt3: "உறுதியான, நன்கு கட்டப்பட்ட, அமைதியான, எளிதில் எடை அதிகரிக்கும். ( கபம் )", q5Title: "இடம் மற்றும் பட்ஜெட்", q5Region: "உங்கள் பகுதி", q5Budget: "வாராந்திர பட்ஜெட்", q5OptNorth: "வட இந்தியா", q5OptSouth: "தென்னிந்தியா", q5OptEast: "கிழக்கு இந்தியா", q5OptWest: "மேற்கு இந்தியா", q5OptLow: "குறைந்த", q5OptMedium: "நடுத்தர", q5OptHigh: "உயர்", q6Title: "உங்கள் சரியான திட்டத்தை உருவாக்குகிறோம்...", q6Desc: "எங்கள் AI உங்களுக்காக ஒரு தனிப்பயனாக்கப்பட்ட ஆரோக்கிய பயணத்தை உருவாக்க உங்கள் உள்ளீடுகளை பகுப்பாய்வு செய்கிறது.",
+                    btnBack: "பின்னால்", btnNext: "அடுத்து", btnGeneratePlan: "எனது திட்டத்தை உருவாக்கு",
+                    dashboardTitle: "உங்கள் வாராந்திர திட்டம்", btnShoppingList: "ஷாப்பிங் பட்டியலை உருவாக்கு", btnDayDetails: "நாள் விவரங்களைக் காண்க",
+                    welcomeMessage: "வரவேற்கிறோம்!", goalFocus: "உங்கள் இலக்குக்காக வடிவமைக்கப்பட்ட உங்கள் திட்டம் இங்கே: ", goalFitness: "உடற்தகுதி மற்றும் தசை ஆதாயத்தில் கவனம் செலுத்துதல்", goalHealth: "உங்கள் சுகாதார நிலையை நிர்வகித்தல்", goalProfessional: "உங்கள் பிஸியான கால அட்டவணைக்கு எரிபொருள்", goalAthlete: "உங்கள் தடகள செயல்திறனை மேம்படுத்துதல்",
+                    prefsTitle: "உங்கள் திட்ட விருப்பத்தேர்வுகள்:", prefGoal: "இலக்கு", prefRegion: "பகுதி", prefBudget: "பட்ஜெட்",
+                    tweakTitle: "உங்கள் உணவை மாற்றவும்", tweakDesc: "இங்கே சில ஊட்டச்சத்து ரீதியாக ஒத்த மாற்று வழிகள் உள்ளன", shoppingListTitle: "உங்கள் வாராந்திர ஷாப்பிங் பட்டியல்", recipeIngredients: "பொருட்கள்", recipePreparation: "தயாரிப்பு",
+                    footerAbout: "எங்களை பற்றி", footerPrivacy: "தனியுரிமைக் கொள்கை", footerContact: "தொடர்பு",
+                    mealTypes: { breakfast: "காலை உணவு", lunch: "மதிய உணவு", snack: "சிற்றுண்டி", dinner: "இரவு உணவு" },
+                    dailySummary: "-க்கான தினசரி சுருக்கம்",
+                }
+            };
+            
+            // --- HYPER-PERSONALIZED MEAL DATABASE (GRANULAR) ---
+            const mealDatabase = {
+                // North Indian Meals
+                'dal-makhani': { 
+                    name: "Dal Makhani", 
+                    tags: ['veg', 'north', 'high-protein', 'pitta', 'kapha'], 
+                    cost: 'medium',
+                    calories: 380, protein: 15, serving: "1 bowl (250g)",
+                    ingredients: [
+                        { name: "Whole Black Lentils (Urad)", quantity: "0.75 cup (150g)" },
+                        { name: "Kidney Beans (Rajma)", quantity: "0.25 cup (50g)" },
+                        { name: "Onion", quantity: "1 medium, chopped" },
+                        { name: "Tomato Puree", quantity: "1 cup (200g)" },
+                        { name: "Ginger-Garlic Paste", quantity: "1 tbsp" },
+                        { name: "Cream (Malai)", quantity: "2 tbsp" },
+                        { name: "Butter", quantity: "1 tbsp" },
+                        { name: "Spices (Garam Masala, Red Chili)", quantity: "1 tsp each" }
+                    ],
+                    recipe: "1. Soak lentils and rajma overnight. Pressure cook until soft.\n2. Sauté onions, ginger-garlic paste. Add tomato puree and spices. Cook until oil separates.\n3. Add cooked lentils. Simmer for 30 mins.\n4. Stir in cream and butter before serving."
+                },
+                'paneer-butter-masala': { 
+                    name: "Paneer Butter Masala", 
+                    tags: ['veg', 'north', 'high-protein', 'pitta'], 
+                    cost: 'high',
+                    calories: 450, protein: 18, serving: "1 bowl (250g)",
+                    ingredients: [
+                        { name: "Paneer (Cottage Cheese)", quantity: "200g, cubed" },
+                        { name: "Tomatoes", quantity: "4 large, pureed" },
+                        { name: "Onion", quantity: "1 large, chopped" },
+                        { name: "Cashews", quantity: "0.25 cup (40g)" },
+                        { name: "Cream (Malai)", quantity: "0.25 cup (60ml)" },
+                        { name: "Butter", quantity: "2 tbsp" },
+                        { name: "Ginger-Garlic Paste", quantity: "1 tbsp" },
+                        { name: "Spices (Garam Masala, Kasuri Methi)", quantity: "1 tsp each" }
+                    ],
+                    recipe: "1. Sauté onions, ginger-garlic paste, cashews, and tomatoes. Blend to a smooth paste.\n2. Strain the paste into a pan with butter. Add spices and cook for 10 mins.\n3. Add paneer cubes and cream. Simmer for 5 mins.\n4. Garnish with Kasuri Methi."
+                },
+                'chana-masala': { 
+                    name: "Chana Masala", 
+                    tags: ['veg', 'vegan', 'north', 'low-glycemic', 'high-protein', 'vata'], 
+                    cost: 'low',
+                    calories: 320, protein: 12, serving: "1 bowl (250g)",
+                    ingredients: [
+                        { name: "Chickpeas (Kabuli Chana)", quantity: "1 cup (200g), boiled" },
+                        { name: "Onion", quantity: "1 large, chopped" },
+                        { name: "Tomato", quantity: "2 medium, chopped" },
+                        { name: "Ginger-Garlic Paste", quantity: "1 tbsp" },
+                        { name: "Chana Masala Powder", quantity: "2 tsp" },
+                        { name: "Turmeric", quantity: "0.5 tsp" },
+                        { name: "Oil", quantity: "1 tbsp" }
+                    ],
+                    recipe: "1. Heat oil, sauté onions until golden. Add ginger-garlic paste.\n2. Add tomatoes and cook until soft. Add spices (chana masala, turmeric).\n3. Add boiled chickpeas and some water. Simmer for 15-20 mins.\n4. Garnish with coriander."
+                },
+                'butter-chicken': { 
+                    name: "Butter Chicken", 
+                    tags: ['non-veg', 'north', 'high-protein'], 
+                    cost: 'high',
+                    calories: 500, protein: 30, serving: "1 bowl (250g)",
+                    ingredients: [
+                        { name: "Chicken Breast", quantity: "250g, cubed" },
+                        { name: "Yogurt (for marinade)", quantity: "0.5 cup (120g)" },
+                        { name: "Tomatoes", quantity: "4 large, pureed" },
+                        { name: "Cashews", quantity: "0.25 cup (40g)" },
+                        { name: "Cream (Malai)", quantity: "0.25 cup (60ml)" },
+                        { name: "Butter", quantity: "2 tbsp" },
+                        { name: "Tandoori Masala", quantity: "1 tbsp" }
+                    ],
+                    recipe: "1. Marinate chicken in yogurt and tandoori masala. Grill or pan-sear until cooked.\n2. Sauté tomatoes and cashews, blend into a smooth paste.\n3. Cook the paste with butter. Add spices.\n4. Add cooked chicken and cream. Simmer for 10 mins."
+                },
+                'rajma-chawal': { 
+                    name: "Rajma Chawal", 
+                    tags: ['veg', 'north', 'high-protein', 'comfort-food', 'kapha'], 
+                    cost: 'low',
+                    calories: 450, protein: 15, serving: "1 plate (Rajma 1 bowl, Rice 1 cup)",
+                    ingredients: [
+                        { name: "Kidney Beans (Rajma)", quantity: "1 cup (200g), boiled" },
+                        { name: "Basmati Rice", quantity: "1 cup (180g), cooked" },
+                        { name: "Onion", quantity: "1 large, chopped" },
+                        { name: "Tomato Puree", quantity: "1 cup (200g)" },
+                        { name: "Ginger-Garlic Paste", quantity: "1 tbsp" },
+                        { name: "Rajma Masala", quantity: "1 tbsp" },
+                        { name: "Oil", quantity: "1 tbsp" }
+                    ],
+                    recipe: "1. Heat oil, sauté onions until golden. Add ginger-garlic paste.\n2. Add tomato puree and spices. Cook for 10 mins.\n3. Add boiled rajma and water. Simmer for 20-30 mins.\n4. Serve hot with steamed basmati rice."
+                },
+                'poha': { 
+                    name: "Poha", 
+                    tags: ['veg', 'vegan', 'west', 'jain', 'vata', 'low-glycemic'], 
+                    cost: 'low',
+                    calories: 250, protein: 5, serving: "1 plate (150g)",
+                    ingredients: [
+                        { name: "Flattened Rice (Poha)", quantity: "1.5 cups (150g)" },
+                        { name: "Onion", quantity: "1 small, chopped (optional for Jain)" },
+                        { name: "Peanuts", quantity: "2 tbsp" },
+                        { name: "Mustard Seeds", quantity: "1 tsp" },
+                        { name: "Curry Leaves", quantity: "1 sprig" },
+                        { name: "Turmeric", quantity: "0.5 tsp" },
+                        { name: "Lemon Juice", quantity: "1 tbsp" },
+                        { name: "Oil", quantity: "1 tbsp" }
+                    ],
+                    recipe: "1. Rinse poha lightly and drain. Add salt and turmeric.\n2. Heat oil, add mustard seeds, peanuts, and curry leaves.\n3. Add onions (if using) and sauté. Add poha and stir well.\n4. Cook for 2-3 mins. Squeeze lemon juice and garnish with coriander."
+                },
+                'upma': { 
+                    name: "Upma", 
+                    tags: ['veg', 'south', 'north', 'vata'], 
+                    cost: 'low',
+                    calories: 280, protein: 6, serving: "1 bowl (200g)",
+                    ingredients: [
+                        { name: "Semolina (Rava/Sooji)", quantity: "1 cup (160g)" },
+                        { name: "Mixed Vegetables (Carrot, Peas)", quantity: "0.5 cup, chopped" },
+                        { name: "Onion", quantity: "1 small, chopped" },
+                        { name: "Mustard Seeds", quantity: "1 tsp" },
+                        { name: "Curry Leaves", quantity: "1 sprig" },
+                        { name: "Ginger", quantity: "1 inch, grated" },
+                        { name: "Ghee/Oil", quantity: "1 tbsp" },
+                        { name: "Hot Water", quantity: "2.5 cups" }
+                    ],
+                    recipe: "1. Dry roast rava until aromatic. Set aside.\n2. Heat ghee/oil, add mustard seeds, curry leaves, and ginger.\n3. Sauté onions and vegetables until soft.\n4. Add hot water and salt. Bring to a boil.\n5. Slowly add roasted rava, stirring constantly to avoid lumps.\n6. Cover and cook on low heat for 5-7 mins."
+                },
+                'oats-upma': {
+                    name: "Oats Upma",
+                    tags: ['veg', 'low-glycemic', 'high-protein', 'vata', 'kapha'],
+                    cost: 'medium',
+                    calories: 300, protein: 10, serving: "1 bowl (200g)",
+                    ingredients: [
+                        { name: "Rolled Oats", quantity: "1 cup (90g)" },
+                        { name: "Mixed Vegetables (Carrot, Peas, Beans)", quantity: "1 cup, chopped" },
+                        { name: "Onion", quantity: "1 small, chopped" },
+                        { name: "Mustard Seeds", quantity: "1 tsp" },
+                        { name: "Curry Leaves", quantity: "1 sprig" },
+                        { name: "Turmeric", quantity: "0.5 tsp" },
+                        { name: "Oil", quantity: "1 tbsp" },
+                        { name: "Hot Water", quantity: "1.5 cups" }
+                    ],
+                    recipe: "1. Dry roast oats for 2-3 minutes. Set aside.\n2. Heat oil, add mustard seeds and curry leaves.\n3. Sauté onions and all vegetables until tender.\n4. Add turmeric, salt, and hot water. Bring to a boil.\n5. Add roasted oats, stir well. Cover and cook for 5-7 minutes until oats are soft."
+                },
+                'idli-sambar': { 
+                    name: "Idli Sambar", 
+                    tags: ['veg', 'vegan', 'south', 'low-glycemic', 'vata'], 
+                    cost: 'low',
+                    calories: 300, protein: 10, serving: "4 idlis (150g) + 1 bowl Sambar (200g)",
+                    ingredients: [
+                        { name: "Idli Batter", quantity: "2 cups (for 4 idlis)" },
+                        { name: "Toor Dal (Arhar Dal)", quantity: "0.5 cup (100g)" },
+                        { name: "Mixed Vegetables (Drumstick, Pumpkin)", quantity: "1 cup, chopped" },
+                        { name: "Tamarind Paste", quantity: "1 tbsp" },
+                        { name: "Sambar Powder", quantity: "2 tsp" },
+                        { name: "Mustard Seeds", quantity: "1 tsp" },
+                        { name: "Curry Leaves", quantity: "1 sprig" }
+                    ],
+                    recipe: "1. Steam idli batter in molds for 10-12 mins.\n2. Pressure cook toor dal and vegetables.\n3. Combine cooked dal/veg, tamarind paste, and sambar powder. Add water and boil for 10 mins.\n4. Prepare tempering (tadka) with oil, mustard seeds, and curry leaves. Add to sambar.\n5. Serve hot idlis with sambar."
+                },
+                'dosa-chutney': { 
+                    name: "Dosa with Chutney", 
+                    tags: ['veg', 'vegan', 'south', 'vata'], 
+                    cost: 'low',
+                    calories: 200, protein: 5, serving: "2 medium dosas (100g) + 2 tbsp Chutney",
+                    ingredients: [
+                        { name: "Dosa Batter", quantity: "1.5 cups (for 2 dosas)" },
+                        { name: "Coconut (for chutney)", quantity: "0.5 cup, grated" },
+                        { name: "Roasted Chana Dal (for chutney)", quantity: "2 tbsp" },
+                        { name: "Green Chili", quantity: "1" },
+                        { name: "Ginger", quantity: "0.5 inch" },
+                        { name: "Oil", quantity: "1 tsp (for cooking dosa)" }
+                    ],
+                    recipe: "1. For chutney: Blend coconut, chana dal, chili, and ginger with water and salt. Set aside.\n2. Heat a tawa (griddle). Spread a ladleful of dosa batter in a circular motion.\n3. Drizzle 1/2 tsp oil. Cook until golden and crisp.\n4. Fold and serve hot with chutney."
+                },
+                'mixed-veg-paratha': { 
+                    name: "Mixed Veg Paratha", 
+                    tags: ['veg', 'north', 'kapha'], 
+                    cost: 'low',
+                    calories: 350, protein: 8, serving: "2 parathas (150g) + 2 tbsp Curd",
+                    ingredients: [
+                        { name: "Whole Wheat Flour (Atta)", quantity: "1 cup (120g)" },
+                        { name: "Mixed Vegetables (Carrot, Potato, Peas)", quantity: "1 cup, grated/mashed" },
+                        { name: "Spices (Garam Masala, Ajwain)", quantity: "1 tsp" },
+                        { name: "Ghee/Oil", quantity: "2 tsp (for cooking)" },
+                        { name: "Curd (Dahi)", quantity: "2 tbsp (for serving)" }
+                    ],
+                    recipe: "1. Knead atta with water to make a soft dough. Rest for 15 mins.\n2. Mix vegetables with spices and salt for the stuffing.\n3. Take a ball of dough, flatten it, place 2 tbsp of stuffing, and seal it.\n4. Roll out gently into a paratha.\n5. Cook on a hot tawa with ghee/oil until golden brown on both sides.\n6. Serve with curd."
+                },
+                'moong-dal-cheela': { 
+                    name: "Moong Dal Cheela", 
+                    tags: ['veg', 'vegan', 'high-protein', 'low-glycemic', 'jain', 'kapha'], 
+                    cost: 'medium',
+                    calories: 280, protein: 14, serving: "2 cheelas (160g)",
+                    ingredients: [
+                        { name: "Yellow Moong Dal", quantity: "1 cup (200g), soaked for 3 hrs" },
+                        { name: "Ginger", quantity: "1 inch" },
+                        { name: "Green Chili", quantity: "1" },
+                        { name: "Turmeric", quantity: "0.25 tsp" },
+                        { name: "Salt", quantity: "to taste" },
+                        { name: "Oil", quantity: "2 tsp (for cooking)" }
+                    ],
+                    recipe: "1. Drain soaked moong dal. Blend with ginger and chili to a smooth batter. Add water as needed.\n2. Add turmeric and salt to the batter.\n3. Heat a non-stick tawa. Pour a ladleful of batter and spread thin.\n4. Drizzle 1 tsp of oil. Cook until crisp on one side, then flip and cook for 1 min.\n5. Serve hot with green chutney."
+                },
+                'besan-cheela': { 
+                    name: "Besan Cheela (Pudla)", 
+                    tags: ['veg', 'vegan', 'west', 'high-protein', 'low-glycemic', 'jain', 'kapha'], 
+                    cost: 'low',
+                    calories: 300, protein: 15, serving: "2 cheelas (180g)",
+                    ingredients: [
+                        { name: "Gram Flour (Besan)", quantity: "1.5 cups (150g)" },
+                        { name: "Onion", quantity: "1 small, finely chopped (optional for Jain)" },
+                        { name: "Tomato", quantity: "1 small, finely chopped" },
+                        { name: "Coriander Leaves", quantity: "2 tbsp, chopped" },
+                        { name: "Ajwain (Carom Seeds)", quantity: "0.5 tsp" },
+                        { name: "Turmeric", quantity: "0.25 tsp" },
+                        { name: "Oil", quantity: "2 tsp (for cooking)" }
+                    ],
+                    recipe: "1. In a bowl, mix besan, onion, tomato, coriander, ajwain, turmeric, and salt.\n2. Add water slowly to make a smooth, pouring consistency batter.\n3. Heat a non-stick tawa. Pour a ladleful of batter and spread.\n4. Drizzle 1 tsp oil. Cook for 2-3 mins, flip, and cook the other side.\n5. Serve hot."
+                },
+                'egg-bhurji': { 
+                    name: "Egg Bhurji", 
+                    tags: ['non-veg', 'high-protein', 'pitta'], 
+                    cost: 'low',
+                    calories: 220, protein: 18, serving: "1 bowl (150g) from 3 eggs",
+                    ingredients: [
+                        { name: "Eggs", quantity: "3 large" },
+                        { name: "Onion", quantity: "1 medium, chopped" },
+                        { name: "Tomato", quantity: "1 medium, chopped" },
+                        { name: "Green Chili", quantity: "1, chopped" },
+                        { name: "Turmeric", quantity: "0.25 tsp" },
+                        { name: "Pav Bhaji Masala (optional)", quantity: "0.5 tsp" },
+                        { name: "Oil", quantity: "1 tbsp" }
+                    ],
+                    recipe: "1. Heat oil, sauté onions and green chili until soft.\n2. Add tomatoes and cook until mushy. Add turmeric and masala.\n3. Crack eggs directly into the pan. Add salt.\n4. Scramble quickly and cook until eggs are just set.\n5. Garnish with coriander."
+                },
+                'masala-oats': { 
+                    name: "Masala Oats", 
+                    tags: ['veg', 'vegan', 'low-glycemic', 'vata', 'kapha'], 
+                    cost: 'medium',
+                    calories: 260, protein: 8, serving: "1 bowl (200g)",
+                    ingredients: [
+                        { name: "Rolled Oats", quantity: "0.75 cup (70g)" },
+                        { name: "Mixed Vegetables (Carrot, Peas)", quantity: "0.5 cup, chopped" },
+                        { name: "Onion", quantity: "1 small, chopped" },
+                        { name: "Tomato", quantity: "1 small, chopped" },
+                        { name: "Turmeric", quantity: "0.5 tsp" },
+                        { name: "Garam Masala", quantity: "0.5 tsp" },
+                        { name: "Oil", quantity: "1 tsp" },
+                        { name: "Water", quantity: "2 cups" }
+                    ],
+                    recipe: "1. Heat oil, sauté onions. Add tomatoes and vegetables. Cook for 5 mins.\n2. Add spices and salt. Stir for 1 min.\n3. Add oats and water. Bring to a boil.\n4. Simmer for 5-7 mins until oats are cooked and it thickens.\n5. Serve hot."
+                },
+                'sprouts-salad': { 
+                    name: "Sprouts Salad", 
+                    tags: ['veg', 'vegan', 'high-protein', 'low-glycemic', 'jain', 'vata'], 
+                    cost: 'low',
+                    calories: 180, protein: 10, serving: "1 large bowl (250g)",
+                    ingredients: [
+                        { name: "Mixed Sprouts (Moong, Chana)", quantity: "1.5 cups (150g), boiled" },
+                        { name: "Onion", quantity: "1 small, chopped (optional for Jain)" },
+                        { name: "Tomato", quantity: "1 small, chopped" },
+                        { name: "Cucumber", quantity: "0.5, chopped" },
+                        { name: "Lemon Juice", quantity: "1 tbsp" },
+                        { name: "Chaat Masala", quantity: "1 tsp" }
+                    ],
+                    recipe: "1. In a large bowl, combine boiled sprouts, onion, tomato, and cucumber.\n2. Add lemon juice, chaat masala, and salt.\n3. Toss well to combine.\n4. Garnish with coriander. Serve fresh."
+                },
+                'fruit-chaat': { 
+                    name: "Fruit Chaat", 
+                    tags: ['veg', 'vegan', 'jain', 'vata', 'pitta'], 
+                    cost: 'medium',
+                    calories: 150, protein: 2, serving: "1 large bowl (250g)",
+                    ingredients: [
+                        { name: "Apple", quantity: "1 medium, chopped" },
+                        { name: "Banana", quantity: "1 medium, chopped" },
+                        { name: "Pomegranate Seeds", quantity: "0.5 cup" },
+                        { name: "Grapes", quantity: "0.5 cup, halved" },
+                        { name: "Chaat Masala", quantity: "1 tsp" },
+                        { name: "Lemon Juice", quantity: "0.5 tbsp" }
+                    ],
+                    recipe: "1. Combine all chopped fruits in a large bowl.\n2. Sprinkle chaat masala, salt (optional), and lemon juice.\n3. Toss gently to combine.\n4. Serve immediately."
+                },
+                'roasted-makhana': { 
+                    name: "Roasted Makhana", 
+                    tags: ['veg', 'vegan', 'jain', 'vata', 'low-glycemic'], 
+                    cost: 'medium',
+                    calories: 120, protein: 4, serving: "1 bowl (30g)",
+                    ingredients: [
+                        { name: "Fox Nuts (Makhana)", quantity: "2 cups (30g)" },
+                        { name: "Ghee/Oil", quantity: "1 tsp" },
+                        { name: "Salt", quantity: "pinch" },
+                        { name: "Black Pepper", quantity: "0.25 tsp" }
+                    ],
+                    recipe: "1. Heat ghee/oil in a pan.\n2. Add makhana and roast on low heat for 8-10 mins until crisp.\n3. Add salt and pepper. Toss well.\n4. Let cool completely before storing in an airtight container."
+                },
+                'buttermilk': { 
+                    name: "Masala Chaas (Buttermilk)", 
+                    tags: ['veg', 'pitta', 'vata'], 
+                    cost: 'low',
+                    calories: 50, protein: 2, serving: "1 glass (250ml)",
+                    ingredients: [
+                        { name: "Yogurt (Curd)", quantity: "0.5 cup (120g)" },
+                        { name: "Water", quantity: "1 cup (240ml), cold" },
+                        { name: "Roasted Cumin Powder", quantity: "0.5 tsp" },
+                        { name: "Black Salt (Kala Namak)", quantity: "0.25 tsp" },
+                        { name: "Mint Leaves", quantity: "few, chopped" }
+                    ],
+                    recipe: "1. Whisk yogurt until smooth. Add cold water and whisk again.\n2. Add cumin powder, black salt, and mint leaves.\n3. Stir well. Serve chilled."
+                },
+                // South Indian
+                'lemon-rice': { 
+                    name: "Lemon Rice", 
+                    tags: ['veg', 'vegan', 'south', 'jain', 'vata'], 
+                    cost: 'low',
+                    calories: 380, protein: 6, serving: "1 plate (250g)",
+                    ingredients: [
+                        { name: "Cooked Rice", quantity: "1.5 cups (250g)" },
+                        { name: "Lemon Juice", quantity: "2 tbsp" },
+                        { name: "Oil", quantity: "1 tbsp" },
+                        { name: "Mustard Seeds", quantity: "1 tsp" },
+                        { name: "Chana Dal", quantity: "1 tsp" },
+                        { name: "Urad Dal", quantity: "1 tsp" },
+                        { name: "Peanuts", quantity: "2 tbsp" },
+                        { name: "Curry Leaves", quantity: "1 sprig" },
+                        { name: "Turmeric", quantity: "0.5 tsp" }
+                    ],
+                    recipe: "1. Heat oil, add mustard seeds, dals, peanuts, and curry leaves. Sauté until golden.\n2. Add turmeric. Turn off heat.\n3. Add cooked rice, salt, and lemon juice. Mix well.\n4. Garnish with coriander."
+                },
+                'sambar-rice': { 
+                    name: "Sambar Rice (Bisi Bele Bath)", 
+                    tags: ['veg', 'south', 'pitta', 'kapha'], 
+                    cost: 'medium',
+                    calories: 420, protein: 14, serving: "1 plate (300g)",
+                    ingredients: [
+                        { name: "Rice", quantity: "0.5 cup (90g)" },
+                        { name: "Toor Dal", quantity: "0.5 cup (100g)" },
+                        { name: "Mixed Vegetables", quantity: "1 cup (Carrot, Beans, Peas)" },
+                        { name: "Tamarind Paste", quantity: "1 tbsp" },
+                        { name: "Bisi Bele Bath Masala", quantity: "2 tbsp" },
+                        { name: "Ghee", quantity: "1 tbsp" },
+                        { name: "Mustard Seeds", quantity: "1 tsp" },
+                        { name: "Cashews", quantity: "1 tbsp" }
+                    ],
+                    recipe: "1. Pressure cook rice, dal, and vegetables together until mushy.\n2. Add tamarind paste, masala, salt, and water. Simmer for 10 mins.\n3. Prepare tempering (tadka) with ghee, mustard seeds, and cashews. Add to the rice.\n4. Mix well. Serve hot."
+                },
+                'fish-curry': { 
+                    name: "Fish Curry (South Indian Style)", 
+                    tags: ['non-veg', 'south', 'east', 'high-protein', 'pitta'], 
+                    cost: 'high',
+                    calories: 400, protein: 28, serving: "1 bowl (250g) with 150g fish",
+                    ingredients: [
+                        { name: "Fish (Kingfish/Pomfret)", quantity: "200g, steaks" },
+                        { name: "Coconut Milk", quantity: "1 cup (240ml)" },
+                        { name: "Onion", quantity: "1 small, chopped" },
+                        { name: "Tomato", quantity: "1 small, chopped" },
+                        { name: "Tamarind Paste", quantity: "1 tsp" },
+                        { name: "Mustard Seeds", quantity: "1 tsp" },
+                        { name: "Fenugreek Seeds", quantity: "0.25 tsp" },
+                        { name: "Curry Leaves", quantity: "1 sprig" },
+                        { name: "Red Chili Powder", quantity: "1 tsp" },
+                        { name: "Coriander Powder", quantity: "1 tsp" }
+                    ],
+                    recipe: "1. Heat oil, add mustard, fenugreek, and curry leaves.\n2. Sauté onions. Add tomatoes and cook until soft.\n3. Add spice powders and tamarind paste. Cook for 2 mins.\n4. Add thin coconut milk and fish. Simmer for 10-12 mins until fish is cooked.\n5. Add thick coconut milk. Warm through (do not boil). Serve."
+                },
+                // East Indian
+                'luchi-alur-dom': { 
+                    name: "Luchi Alur Dom", 
+                    tags: ['veg', 'east', 'comfort-food', 'kapha'], 
+                    cost: 'medium',
+                    calories: 480, protein: 8, serving: "4 luchis + 1 bowl Alur Dom (250g)",
+                    ingredients: [
+                        { name: "Maida (All-purpose Flour)", quantity: "1 cup (120g, for luchi)" },
+                        { name: "Baby Potatoes", quantity: "200g, boiled" },
+                        { name: "Tomato", quantity: "1 large, pureed" },
+                        { name: "Ginger Paste", quantity: "1 tsp" },
+                        { name: "Bengali Garam Masala", quantity: "0.5 tsp" },
+                        { name: "Cumin Powder", quantity: "1 tsp" },
+                        { name: "Turmeric", quantity: "0.5 tsp" },
+                        { name: "Oil/Ghee", quantity: "for frying luchi" }
+                    ],
+                    recipe: "1. Knead maida with oil and water to a firm dough. Rest.\n2. Sauté ginger paste, add tomato puree and spices. Cook until oil separates.\n3. Add boiled potatoes. Sauté for 5 mins. Add water and simmer for 10 mins.\n4. Roll small discs from dough. Deep fry in hot oil to make fluffy luchis.\n5. Serve hot."
+                },
+                'machher-jhol': { 
+                    name: "Machher Jhol (Fish Stew)", 
+                    tags: ['non-veg', 'east', 'high-protein', 'pitta'], 
+                    cost: 'medium',
+                    calories: 360, protein: 25, serving: "1 bowl (300g) with 150g fish",
+                    ingredients: [
+                        { name: "Rohu Fish", quantity: "200g, steaks" },
+                        { name: "Potato", quantity: "1 medium, in wedges" },
+                        { name: "Eggplant", quantity: "0.5, in chunks" },
+                        { name: "Mustard Oil", quantity: "2 tbsp" },
+                        { name: "Panch Phoron (5-spice)", quantity: "1 tsp" },
+                        { name: "Cumin Powder", quantity: "1 tsp" },
+                        { name: "Coriander Powder", quantity: "1 tsp" },
+                        { name: "Turmeric", quantity: "0.5 tsp" },
+                        { name: "Ginger Paste", quantity: "1 tsp" }
+                    ],
+                    recipe: "1. Fry fish steaks in mustard oil until golden. Set aside.\n2. In the same oil, fry potatoes and eggplant. Set aside.\n3. Add panch phoron to oil. Add ginger paste and powdered spices with a splash of water. Sauté for 2 mins.\n4. Add 2 cups water and bring to a boil. Add fried vegetables and fish.\n5. Simmer for 10 mins. Serve with rice."
+                },
+                'khichuri': { 
+                    name: "Khichuri (Bengali Khichdi)", 
+                    tags: ['veg', 'east', 'comfort-food', 'kapha', 'vata'], 
+                    cost: 'low',
+                    calories: 400, protein: 15, serving: "1 plate (300g)",
+                    ingredients: [
+                        { name: "Gobindobhog Rice", quantity: "0.5 cup (90g)" },
+                        { name: "Roasted Moong Dal", quantity: "0.5 cup (100g)" },
+                        { name: "Mixed Vegetables (Cauliflower, Peas)", quantity: "1 cup" },
+                        { name: "Ginger Paste", quantity: "1 tbsp" },
+                        { name: "Cumin Seeds", quantity: "1 tsp" },
+                        { name: "Bay Leaf", quantity: "1" },
+                        { name: "Ghee", quantity: "1 tbsp" },
+                        { name: "Turmeric", quantity: "1 tsp" }
+                    ],
+                    recipe: "1. Heat ghee, add cumin seeds and bay leaf.\n2. Add ginger paste and sauté. Add vegetables and fry for 5 mins.\n3. Add washed rice and dal. Sauté for 2-3 mins.\n4. Add turmeric, salt, and 4 cups hot water. Pressure cook for 2 whistles.\n5. Serve hot with a dollop of ghee."
+                },
+                // West Indian
+                'pav-bhaji': { 
+                    name: "Pav Bhaji", 
+                    tags: ['veg', 'west', 'comfort-food', 'kapha'], 
+                    cost: 'medium',
+                    calories: 450, protein: 10, serving: "1 bowl Bhaji (250g) + 2 Pav",
+                    ingredients: [
+                        { name: "Potatoes", quantity: "2 medium, boiled" },
+                        { name: "Mixed Vegetables (Cauliflower, Peas, Capsicum)", quantity: "1.5 cups" },
+                        { name: "Onion", quantity: "1 large, chopped" },
+                        { name: "Tomatoes", quantity: "2 large, chopped" },
+                        { name: "Pav Bhaji Masala", quantity: "2 tbsp" },
+                        { name: "Butter", quantity: "2 tbsp" },
+                        { name: "Pav Buns", quantity: "2" }
+                    ],
+                    recipe: "1. Boil and mash all vegetables.\n2. Heat butter, sauté onions. Add tomatoes and cook until soft.\n3. Add pav bhaji masala and chili powder. Add mashed vegetables and water.\n4. Simmer and mash for 15-20 mins. Add salt.\n5. Toast pav buns with butter. Serve hot with bhaji."
+                },
+                'thepla': { 
+                    name: "Methi Thepla", 
+                    tags: ['veg', 'west', 'jain', 'vata'], 
+                    cost: 'low',
+                    calories: 200, protein: 6, serving: "2 theplas (100g) + 1 tbsp Pickle",
+                    ingredients: [
+                        { name: "Whole Wheat Flour (Atta)", quantity: "1 cup (120g)" },
+                        { name: "Besan", quantity: "2 tbsp" },
+                        { name: "Fenugreek Leaves (Methi)", quantity: "0.5 cup, chopped" },
+                        { name: "Yogurt", quantity: "2 tbsp" },
+                        { name: "Turmeric", quantity: "0.5 tsp" },
+                        { name: "Red Chili Powder", quantity: "0.5 tsp" },
+                        { name: "Oil", quantity: "1 tbsp (in dough) + for cooking" }
+                    ],
+                    recipe: "1. Mix all ingredients (flour, besan, methi, yogurt, spices, 1 tbsp oil) and knead into a soft dough with water.\n2. Rest for 15 mins. Roll out thin theplas.\n3. Cook on a hot tawa with a little oil on both sides.\n4. Serve with pickle or curd."
+                },
+                // More High-Protein (Fitness)
+                'soya-chunk-curry': {
+                    name: "Soya Chunk Curry",
+                    tags: ['veg', 'vegan', 'high-protein', 'kapha'],
+                    cost: 'low',
+                    calories: 350, protein: 25, serving: "1 bowl (250g)",
+                    ingredients: [
+                        { name: "Soya Chunks", quantity: "1 cup (60g), boiled" },
+                        { name: "Onion", quantity: "1 large, chopped" },
+                        { name: "Tomato Puree", quantity: "1 cup (200g)" },
+                        { name: "Ginger-Garlic Paste", quantity: "1 tbsp" },
+                        { name: "Garam Masala", quantity: "1 tsp" },
+                        { name: "Turmeric", quantity: "0.5 tsp" },
+                        { name: "Oil", quantity: "1 tbsp" },
+                        { name: "Peas (optional)", quantity: "0.25 cup" }
+                    ],
+                    recipe: "1. Squeeze water from boiled soya chunks.\n2. Heat oil, sauté onions. Add ginger-garlic paste.\n3. Add tomato puree and all spices. Cook for 10 mins.\n4. Add soya chunks and peas. Add 1 cup water and simmer for 15 mins.\n5. Garnish with coriander."
+                },
+                'grilled-chicken-salad': {
+                    name: "Grilled Chicken Salad",
+                    tags: ['non-veg', 'high-protein', 'low-glycemic', 'pitta'],
+                    cost: 'high',
+                    calories: 400, protein: 35, serving: "1 large bowl (300g)",
+                    ingredients: [
+                        { name: "Chicken Breast", quantity: "150g" },
+                        { name: "Mixed Lettuce/Greens", quantity: "2 cups" },
+                        { name: "Cherry Tomatoes", quantity: "0.5 cup, halved" },
+                        { name: "Cucumber", quantity: "0.5, sliced" },
+                        { name: "Olive Oil (for dressing)", quantity: "1 tbsp" },
+                        { name: "Lemon Juice (for dressing)", quantity: "1 tbsp" },
+                        { name: "Salt & Pepper", quantity: "to taste" }
+                    ],
+                    recipe: "1. Season chicken breast with salt, pepper, and herbs. Grill or pan-sear until cooked through. Slice it.\n2. In a large bowl, combine lettuce, tomatoes, and cucumber.\n3. Add the sliced grilled chicken on top.\n4. Whisk olive oil, lemon juice, salt, and pepper for the dressing. Drizzle over the salad."
+                },
+                'paneer-bhurji': {
+                    name: "Paneer Bhurji",
+                    tags: ['veg', 'high-protein', 'pitta', 'kapha'],
+                    cost: 'medium',
+                    calories: 300, protein: 20, serving: "1 bowl (200g)",
+                    ingredients: [
+                        { name: "Paneer (Cottage Cheese)", quantity: "200g, crumbled" },
+                        { name: "Onion", quantity: "1 medium, chopped" },
+                        { name: "Tomato", quantity: "1 medium, chopped" },
+                        { name: "Capsicum", quantity: "0.5, chopped" },
+                        { name: "Turmeric", quantity: "0.25 tsp" },
+                        { name: "Pav Bhaji Masala (optional)", quantity: "0.5 tsp" },
+                        { name: "Oil", quantity: "1 tbsp" }
+                    ],
+                    recipe: "1. Heat oil, sauté onions and capsicum until soft.\n2. Add tomatoes and cook until mushy. Add spices.\n3. Add crumbled paneer and salt. Mix well.\n4. Cook for 3-4 minutes, stirring. Garnish with coriander."
+                },
+                // More Health-Management (Low-Glycemic)
+                'ragi-dosa': {
+                    name: "Ragi Dosa",
+                    tags: ['veg', 'vegan', 'south', 'low-glycemic', 'high-protein', 'kapha'],
+                    cost: 'medium',
+                    calories: 180, protein: 6, serving: "2 medium dosas (100g)",
+                    ingredients: [
+                        { name: "Ragi Flour (Finger Millet)", quantity: "1 cup (120g)" },
+                        { name: "Rice Flour", quantity: "0.25 cup (30g)" },
+                        { name: "Yogurt (or use water for vegan)", quantity: "0.25 cup (60g)" },
+                        { name: "Onion", quantity: "1 small, finely chopped" },
+                        { name: "Green Chili", quantity: "1, finely chopped" },
+                        { name: "Cumin Seeds", quantity: "1 tsp" },
+                        { name: "Water", quantity: "as needed (thin batter)" },
+                        { name: "Oil", quantity: "2 tsp for cooking" }
+                    ],
+                    recipe: "1. Mix all flours, yogurt, onion, chili, cumin, and salt.\n2. Add water to make a very thin, watery batter (like rava dosa).\n3. Heat a tawa. Pour the batter from a height to create a lacy dosa.\n4. Drizzle 1 tsp oil. Cook until crisp. No need to flip.\n5. Fold and serve hot."
+                },
+                'quinoa-pulao': {
+                    name: "Quinoa Pulao",
+                    tags: ['veg', 'vegan', 'high-protein', 'low-glycemic', 'vata'],
+                    cost: 'high',
+                    calories: 360, protein: 12, serving: "1 plate (250g)",
+                    ingredients: [
+                        { name: "Quinoa", quantity: "1 cup (170g), rinsed" },
+                        { name: "Mixed Vegetables (Carrot, Peas, Beans)", quantity: "1 cup, chopped" },
+                        { name: "Onion", quantity: "1 small, sliced" },
+                        { name: "Cumin Seeds", quantity: "1 tsp" },
+                        { name: "Garam Masala", quantity: "0.5 tsp" },
+                        { name: "Turmeric", quantity: "0.25 tsp" },
+                        { name: "Oil", quantity: "1 tbsp" },
+                        { name: "Water", quantity: "2 cups" }
+                    ],
+                    recipe: "1. Heat oil, add cumin seeds. Add sliced onions and sauté.\n2. Add vegetables and cook for 3-4 mins.\n3. Add spices, salt, and rinsed quinoa. Stir for 1 min.\n4. Add water, bring to a boil. Cover and simmer for 15-20 mins until quinoa is cooked.\n5. Fluff with a fork."
+                }
+                // Add many more meals here...
+            };
+
+
+            // --- GLOBAL STATE & CACHE ---
+            let currentLang = 'en';
+            let quizData = {};
+            let currentWeeklyPlan = []; // Stores the 7-day plan (7 days * 4 meals)
+            const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+            
+            // --- DOM SELECTORS ---
+            const pageLanding = document.getElementById('page-landing');
+            const pageQuiz = document.getElementById('page-quiz');
+            const pageDashboard = document.getElementById('page-dashboard');
+
+            const homeLink = document.getElementById('homeLink');
+            const startQuizBtn = document.getElementById('startQuizBtn');
+            
+            // Language
+            const languageToggle = document.getElementById('languageToggle');
+            const languageToggleText = document.getElementById('languageToggleText');
+            const languageDropdown = document.getElementById('languageDropdown');
+
+            // Quiz
+            const quizForm = document.getElementById('quiz-form');
+            const quizNav = document.getElementById('quiz-nav');
+            const quizBack = document.getElementById('quiz-back');
+            const quizNext = document.getElementById('quiz-next');
+            const quizProgress = document.getElementById('quiz-progress');
+            const totalQuizSteps = 5; // We have 5 steps of questions
+            
+            // Dashboard
+            const dashboardPlanContainer = document.getElementById('dashboard-plan-container');
+            const dashboardGoalFocus = document.getElementById('dashboard-goal-focus');
+            const prefGoalVal = document.getElementById('pref-goal-val');
+            const prefRegionVal = document.getElementById('pref-region-val');
+            const prefBudgetVal = document.getElementById('pref-budget-val');
+
+            // Modals
+            const tweakModal = document.getElementById('tweakModal');
+            const closeTweakModal = document.getElementById('closeTweakModal');
+            const tweakMealName = document.getElementById('tweak-meal-name');
+            const tweakOptionsContainer = document.getElementById('tweak-options-container');
+
+            const shoppingListModal = document.getElementById('shoppingListModal');
+            const closeShoppingListModal = document.getElementById('closeShoppingListModal');
+            const shoppingListContent = document.getElementById('shopping-list-content');
+            const shoppingListBtn = document.getElementById('shoppingListBtn');
+            
+            const recipeModal = document.getElementById('recipeModal');
+            const closeRecipeModal = document.getElementById('closeRecipeModal');
+            const recipeModalTitle = document.getElementById('recipe-modal-title');
+            const recipeModalContent = document.getElementById('recipe-modal-content');
+
+
+            // --- LANGUAGE & TRANSLATION ---
+
+            function setLanguage(lang) {
+                if (!translations[lang]) {
+                    console.error(`Language ${lang} not found in translations.`);
+                    return;
+                }
+                currentLang = lang;
+                
+                // Update all text elements with data-lang attribute
+                document.querySelectorAll('[data-lang]').forEach(el => {
+                    const key = el.getAttribute('data-lang');
+                    if (translations[lang][key]) {
+                        el.textContent = translations[lang][key];
+                    } else if (translations['en'][key]) {
+                        // Fallback to English if key is missing in current language
+                        el.textContent = translations['en'][key];
+                    }
+                });
+                
+                // Update language toggle button text
+                const toggleLangKey = `lang${lang.charAt(0).toUpperCase() + lang.slice(1)}`;
+                languageToggleText.textContent = translations[lang][toggleLangKey] || translations['en'][toggleLangKey];
+                
+                // Update language dropdown options
+                document.querySelectorAll('#languageDropdown a').forEach(el => {
+                    const key = el.getAttribute('data-lang-key');
+                    if (translations[lang][key]) {
+                        el.textContent = translations[lang][key];
+                    } else if (translations['en'][key]) {
+                        el.textContent = translations['en'][key];
+                    }
+                });
+            }
+
+            languageToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isHidden = languageDropdown.style.display === 'none' || languageDropdown.style.display === '';
+                languageDropdown.style.display = isHidden ? 'block' : 'none';
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!languageToggle.contains(e.target)) {
+                    languageDropdown.style.display = 'none';
+                }
+            });
+
+            document.querySelectorAll('#languageDropdown a').forEach(el => {
+                el.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const langCode = e.target.getAttribute('data-lang-code');
+                    setLanguage(langCode);
+                    languageDropdown.style.display = 'none';
+                    // After language change, if dashboard is visible, re-render it
+                    if (!pageDashboard.classList.contains('hidden')) {
+                        displayDashboard();
+                    }
+                });
+            });
+
+            // --- PAGE NAVIGATION ---
+            function showPage(pageId) {
+                [pageLanding, pageQuiz, pageDashboard].forEach(page => {
+                    page.classList.add('hidden');
+                });
+                document.getElementById(pageId).classList.remove('hidden');
+                window.scrollTo(0, 0); // Scroll to top on page change
+            }
+
+            homeLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                showPage('page-landing');
+            });
+            startQuizBtn.addEventListener('click', () => showPage('page-quiz'));
+
+            // --- QUIZ LOGIC ---
+            let currentStep = 1;
+            quizData = {
+                goal: null,
+                diet: null,
+                dosha: null,
+                region: null,
+                budget: null
+            };
+
+            function updateQuizView() {
+                for (let i = 1; i <= totalQuizSteps + 1; i++) { // +1 for loading step
+                    document.getElementById(`quiz-step-${i}`).classList.add('hidden');
+                }
+                document.getElementById(`quiz-step-${currentStep}`).classList.remove('hidden');
+                
+                quizProgress.style.width = `${(currentStep / totalQuizSteps) * 100}%`;
+                
+                quizBack.disabled = (currentStep === 1);
+                
+                const nextBtnLangKey = (currentStep === totalQuizSteps) ? 'btnGeneratePlan' : 'btnNext';
+                quizNext.querySelector('span').setAttribute('data-lang', nextBtnLangKey);
+                quizNext.querySelector('span').textContent = translations[currentLang][nextBtnLangKey];
+                
+                if (currentStep > totalQuizSteps) {
+                    quizNav.classList.add('hidden');
+                } else {
+                    quizNav.classList.remove('hidden');
+                }
+                
+                // Check if current step is valid to proceed
+                validateQuizStep(currentStep);
+            }
+            
+            function validateQuizStep(step) {
+                if (step === 1) { // Personal Details
+                    const age = document.getElementById('age').value;
+                    const height = document.getElementById('height').value;
+                    const weight = document.getElementById('weight').value;
+                    quizNext.disabled = !(age && height && weight);
+                } else if (step === 2) { // Goal
+                    quizNext.disabled = !quizData.goal;
+                } else if (step === 3) { // Diet
+                    quizNext.disabled = !quizData.diet;
+                } else if (step === 4) { // Dosha
+                    quizNext.disabled = !quizData.dosha;
+                } else if (step === 5) { // Region/Budget
+                    quizNext.disabled = false; // Selections have defaults
+                }
+            }
+            
+            // Add listeners for step 1 inputs
+            ['age', 'height', 'weight'].forEach(id => {
+                document.getElementById(id).addEventListener('input', () => validateQuizStep(1));
+            });
+
+            quizForm.addEventListener('click', (e) => {
+                const option = e.target.closest('.quiz-option');
+                if (!option) return;
+                
+                const field = option.dataset.field;
+                const value = option.dataset.value;
+                
+                quizData[field] = value;
+                
+                // Update visual selection
+                document.querySelectorAll(`.quiz-option[data-field="${field}"]`).forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                option.classList.add('selected');
+                
+                validateQuizStep(currentStep);
+                
+                // Auto-advance to next step
+                setTimeout(() => {
+                    if (!quizNext.disabled) {
+                        quizNext.click();
+                    }
+                }, 300);
+            });
+
+            quizNext.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentStep < totalQuizSteps) {
+                    currentStep++;
+                    updateQuizView();
+                } else if (currentStep === totalQuizSteps) {
+                    // Final step - gather all data and generate plan
+                    quizData.age = document.getElementById('age').value;
+                    quizData.height = document.getElementById('height').value;
+                    quizData.weight = document.getElementById('weight').value;
+                    quizData.gender = document.getElementById('gender').value;
+                    quizData.region = document.getElementById('region').value;
+                    quizData.budget = document.getElementById('budget').value;
+                    
+                    currentStep++; // Move to loading screen
+                    updateQuizView();
+                    
+                    // Simulate AI generation
+                    setTimeout(() => {
+                        generatePersonalizedPlan(quizData);
+                        displayDashboard();
+                        showPage('page-dashboard');
+                    }, 2500);
+                }
+            });
+
+            quizBack.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentStep > 1) {
+                    currentStep--;
+                    updateQuizView();
+                }
+            });
+            
+            // --- AI & MEAL PLAN LOGIC ---
+            function generatePersonalizedPlan(data) {
+                currentWeeklyPlan = []; // Clear previous plan
+                const mealTypes = ['breakfast', 'lunch', 'snack', 'dinner'];
+                let usedMealIds = new Set(); // To avoid repetition in one week
+
+                for (let i = 0; i < 7; i++) { // For each day of the week
+                    let dailyPlan = {
+                        day: daysOfWeek[i],
+                        meals: {}
+                    };
+                    
+                    mealTypes.forEach(mealType => {
+                        const meal = findBestMeal(data, mealType, usedMealIds);
+                        dailyPlan.meals[mealType] = meal;
+                        if(meal) usedMealIds.add(meal.id); // Add to used set
+                    });
+                    
+                    currentWeeklyPlan.push(dailyPlan);
+                }
+            }
+
+            function findBestMeal(data, mealType, usedMealIds) {
+                let bestScore = -Infinity;
+                let bestMeal = null;
+                let fallbackMeal = null; // In case no meal matches perfectly
+                
+                const mealIds = Object.keys(mealDatabase);
+                
+                // Shuffle meal IDs to introduce variety
+                const shuffledMealIds = mealIds.sort(() => 0.5 - Math.random());
+                
+                for (const id of shuffledMealIds) {
+                    const meal = { ...mealDatabase[id], id: id };
+                    let score = 0;
+
+                    // --- DIETARY FILTERS (Hard constraints) ---
+                    if (data.diet === 'veg' && (meal.tags.includes('non-veg'))) continue;
+                    if (data.diet === 'vegan' && (!meal.tags.includes('vegan'))) continue;
+                    if (data.diet === 'non-veg' && (meal.tags.includes('veg') && !meal.tags.includes('non-veg'))) {
+                        // A non-veg user can eat veg, but we should penalize it slightly
+                        score -= 5;
+                    }
+                    if (data.diet === 'jain' && !meal.tags.includes('jain')) continue;
+                    
+                    // Skip if already used this week
+                    if (usedMealIds.has(id)) continue;
+                    
+                    // --- SCORING (Soft constraints) ---
+                    
+                    // 1. Goal Matching
+                    if (data.goal === 'fitness' && meal.tags.includes('high-protein')) score += 10;
+                    if (data.goal === 'health' && meal.tags.includes('low-glycemic')) score += 10;
+                    if (data.goal === 'athlete' && meal.tags.includes('high-protein')) score += 5;
+                    
+                    // 2. Region Matching
+                    if (meal.tags.includes(data.region)) score += 8;
+                    
+                    // 3. Budget Matching
+                    if (meal.cost === data.budget) score += 5;
+                    if (data.budget === 'low' && (meal.cost === 'medium' || meal.cost === 'high')) score -= 5;
+                    if (data.budget === 'medium' && meal.cost === 'high') score -= 3;
+                    
+                    // 4. Dosha Matching
+                    if (meal.tags.includes(data.dosha)) score += 3;
+                    
+                    // 5. Meal Type Matching (Simple placeholder logic)
+                    // In a real app, meals would be tagged by type (breakfast, lunch, etc.)
+                    // Here, we just use heuristics
+                    if (mealType === 'breakfast' && (id.includes('poha') || id.includes('upma') || id.includes('idli') || id.includes('dosa') || id.includes('cheela') || id.includes('oats') || id.includes('thepla'))) score += 5;
+                    if (mealType === 'snack' && (id.includes('salad') || id.includes('sprouts') || id.includes('makhana') || id.includes('chaat') || id.includes('buttermilk'))) score += 5;
+                    if (mealType === 'lunch' && (id.includes('rice') || id.includes('dal') || id.includes('chana') || id.includes('rajma') || id.includes('curry') || id.includes('paratha'))) score += 5;
+                    if (mealType === 'dinner' && (id.includes('curry') || id.includes('khichuri') || id.includes('dal') || id.includes('soya'))) score += 5;
+                    
+                    // Update best meal
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMeal = meal;
+                    }
+                    
+                    // Keep a fallback in case no meal scores positively
+                    if (!fallbackMeal) fallbackMeal = meal;
+                }
+                
+                return bestMeal || fallbackMeal || { ...mealDatabase['khichuri'], id: 'khichuri' }; // Absolute fallback
+            }
+
+            // --- DASHBOARD DISPLAY ---
+            function displayDashboard() {
+                // Update header
+                const goalKey = 'goal' + quizData.goal.charAt(0).toUpperCase() + quizData.goal.slice(1);
+                const goalText = translations[currentLang][goalKey] || quizData.goal;
+                dashboardGoalFocus.textContent = goalText;
+                
+                prefGoalVal.textContent = goalText;
+                const regionKey = 'q5Opt' + quizData.region.charAt(0).toUpperCase() + quizData.region.slice(1);
+                prefRegionVal.textContent = translations[currentLang][regionKey] || quizData.region;
+                const budgetKey = 'q5Opt' + quizData.budget.charAt(0).toUpperCase() + quizData.budget.slice(1);
+                prefBudgetVal.textContent = translations[currentLang][budgetKey] || quizData.budget;
+                
+                // Clear and render plan
+                dashboardPlanContainer.innerHTML = '';
+                currentWeeklyPlan.forEach(dailyPlan => {
+                    const dayCard = document.createElement('div');
+                    dayCard.className = 'bg-white rounded-lg shadow-lg overflow-hidden';
+                    
+                    let mealCardsHTML = '';
+                    ['breakfast', 'lunch', 'snack', 'dinner'].forEach(mealType => {
+                        const meal = dailyPlan.meals[mealType];
+                        if (!meal || !meal.name) {
+                             console.warn(`Missing meal for ${dailyPlan.day}, ${mealType}`);
+                             return;
+                        }
+                        
+                        const mealTagsHTML = meal.tags.map(tag => {
+                            if (tag === 'high-protein') return `<span class="meal-tag bg-red-100 text-red-800">🏋️ ${tag}</span>`;
+                            if (tag === 'low-glycemic') return `<span class="meal-tag bg-blue-100 text-blue-800">📉 ${tag}</span>`;
+                            if (tag === 'veg' || tag === 'vegan') return `<span class="meal-tag bg-green-100 text-green-800">🌿 ${tag}</span>`;
+                            if (tag.includes('vata') || tag.includes('pitta') || tag.includes('kapha')) return `<span class="meal-tag bg-indigo-100 text-indigo-800">🧘 ${tag}</span>`;
+                            return '';
+                        }).join('');
+                        
+                        const mealTypeName = translations[currentLang].mealTypes[mealType] || mealType;
+                        
+                        mealCardsHTML += `
+                            <div class="p-4 border-b border-gray-100">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="text-sm font-semibold text-green-700">${mealTypeName}</p>
+                                        <h4 class="text-lg font-semibold text-gray-900">${meal.name}</h4>
+                                        <p class="text-sm text-gray-500">${meal.calories} kcal, ${meal.protein}g protein (${meal.serving})</p>
+                                        <div class="mt-2 flex flex-wrap">
+                                            ${mealTagsHTML}
+                                        </div>
+                                    </div>
+                                    <div class="flex-shrink-0 flex flex-col items-end space-y-2">
+                                        <button class="tweak-meal-btn text-sm font-medium text-saffron-600 hover:text-saffron-800" data-day-index="${currentWeeklyPlan.indexOf(dailyPlan)}" data-meal-type="${mealType}">
+                                            Tweak
+                                        </button>
+                                        <button class="view-recipe-btn text-sm font-medium text-green-600 hover:text-green-800" data-meal-id="${meal.id}">
+                                            Recipe
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    dayCard.innerHTML = `
+                        <div class="p-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+                            <h3 class="text-xl font-bold text-gray-900">${dailyPlan.day}</h3>
+                            <button class="view-day-details-btn px-3 py-1.5 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100" data-day-index="${currentWeeklyPlan.indexOf(dailyPlan)}">
+                                <span data-lang="btnDayDetails">${translations[currentLang].btnDayDetails}</span>
+                            </button>
+                        </div>
+                        <div class="divide-y divide-gray-100">
+                            ${mealCardsHTML}
+                        </div>
+                    `;
+                    dashboardPlanContainer.appendChild(dayCard);
+                });
+                
+                // Add event listeners for new buttons
+                addDashboardListeners();
+            }
+            
+            function addDashboardListeners() {
+                document.querySelectorAll('.tweak-meal-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const dayIndex = e.target.dataset.dayIndex;
+                        const mealType = e.target.dataset.mealType;
+                        openTweakModal(dayIndex, mealType);
+                    });
+                });
+                
+                document.querySelectorAll('.view-recipe-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const mealId = e.target.dataset.mealId;
+                        openRecipeModal(mealId);
+                    });
+                });
+                
+                document.querySelectorAll('.view-day-details-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const dayIndex = e.target.dataset.dayIndex;
+                        openDayDetailsModal(dayIndex);
+                    });
+                });
+            }
+
+            // --- MODAL LOGIC ---
+            function openModal(modal) {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('modal-backdrop-enter');
+                    modal.querySelector('.modal-enter').classList.remove('modal-enter');
+                }, 10);
+            }
+            
+            function closeModal(modal) {
+                modal.classList.add('modal-backdrop-leave-active');
+                modal.querySelector('.modal-content').classList.add('modal-leave-active');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('modal-backdrop-leave-active');
+                    modal.querySelector('.modal-content').classList.remove('modal-leave-active');
+                }, 200);
+            }
+            
+            // Tweak Modal
+            function openTweakModal(dayIndex, mealType) {
+                const currentMeal = currentWeeklyPlan[dayIndex].meals[mealType];
+                tweakMealName.textContent = currentMeal.name;
+                
+                tweakOptionsContainer.innerHTML = ''; // Clear old options
+                
+                // Find 3 alternatives
+                let alternatives = [];
+                let usedIds = new Set(currentWeeklyPlan.flatMap(day => Object.values(day.meals).map(m => m ? m.id : null)));
+                
+                let attempts = 0;
+                while (alternatives.length < 3 && attempts < 50) {
+                    const newMeal = findBestMeal(quizData, mealType, usedIds);
+                    if (newMeal && newMeal.id !== currentMeal.id) {
+                        alternatives.push(newMeal);
+                        usedIds.add(newMeal.id); // Add to temp used set
+                    }
+                    attempts++;
+                }
+                
+                alternatives.forEach(meal => {
+                    const mealEl = document.createElement('div');
+                    mealEl.className = 'p-4 border border-gray-200 rounded-lg flex justify-between items-center';
+                    mealEl.innerHTML = `
+                        <div>
+                            <h5 class="font-semibold text-gray-800">${meal.name}</h5>
+                            <p class="text-sm text-gray-500">${meal.calories} kcal, ${meal.protein}g protein</p>
+                        </div>
+                        <button class="swap-meal-btn px-3 py-1.5 bg-green-600 text-white text-sm font-semibold rounded-md hover:bg-green-700" data-day-index="${dayIndex}" data-meal-type="${mealType}" data-new-meal-id="${meal.id}">
+                            Swap
+                        </button>
+                    `;
+                    tweakOptionsContainer.appendChild(mealEl);
+                });
+                
+                document.querySelectorAll('.swap-meal-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const dayIndex = e.target.dataset.dayIndex;
+                        const mealType = e.target.dataset.mealType;
+                        const newMealId = e.target.dataset.newMealId;
+                        
+                        // Perform the swap
+                        currentWeeklyPlan[dayIndex].meals[mealType] = { ...mealDatabase[newMealId], id: newMealId };
+                        
+                        // Re-render dashboard and close modal
+                        displayDashboard();
+                        closeModal(tweakModal);
+                    });
+                });
+                
+                openModal(tweakModal);
+            }
+            closeTweakModal.addEventListener('click', () => closeModal(tweakModal));
+
+            // Shopping List Modal
+            function openShoppingListModal() {
+                const ingredients = {};
+                
+                currentWeeklyPlan.forEach(day => {
+                    Object.values(day.meals).forEach(meal => {
+                        if (!meal || !meal.ingredients) return;
+                        meal.ingredients.forEach(ing => {
+                            if (ingredients[ing.name]) {
+                                // This is tricky without a proper unit conversion library
+                                // For now, we'll just list them. A real app would sum quantities.
+                                ingredients[ing.name].count += 1;
+                            } else {
+                                ingredients[ing.name] = { count: 1, quantity: ing.quantity };
+                            }
+                        });
+                    });
+                });
+                
+                let html = '<ul class="list-disc pl-5 space-y-2">';
+                for (const name in ingredients) {
+                    html += `<li class="text-gray-700">${name} <span class="text-gray-500">(Used in ${ingredients[name].count} meals, e.g., ${ingredients[name].quantity})</span></li>`;
+                }
+                html += '</ul>';
+                
+                shoppingListContent.innerHTML = html;
+                openModal(shoppingListModal);
+            }
+            shoppingListBtn.addEventListener('click', openShoppingListModal);
+            closeShoppingListModal.addEventListener('click', () => closeModal(shoppingListModal));
+            
+            // Recipe / Day Details Modal
+            function openRecipeModal(mealId) {
+                const meal = mealDatabase[mealId];
+                if (!meal) return;
+                
+                recipeModalTitle.textContent = meal.name;
+                
+                const ingredientsHTML = meal.ingredients.map(ing => `
+                    <li class="flex justify-between">
+                        <span class="text-gray-700">${ing.name}</span>
+                        <span class="text-gray-600 font-medium">${ing.quantity}</span>
+                    </li>
+                `).join('');
+                
+                recipeModalContent.innerHTML = `
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-800" data-lang="recipeIngredients">${translations[currentLang].recipeIngredients}</h4>
+                        <ul class="mt-2 space-y-1 divide-y divide-gray-100">
+                            ${ingredientsHTML}
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-800" data-lang="recipePreparation">${translations[currentLang].recipePreparation}</h4>
+                        <p class="mt-2 text-gray-700 whitespace-pre-line">${meal.recipe}</p>
+                    </div>
+                `;
+                openModal(recipeModal);
+            }
+            
+            function openDayDetailsModal(dayIndex) {
+                const dayPlan = currentWeeklyPlan[dayIndex];
+                if (!dayPlan) return;
+                
+                recipeModalTitle.textContent = `${translations[currentLang].dailySummary} ${dayPlan.day}`;
+                
+                let contentHTML = '';
+                let totalCalories = 0;
+                let totalProtein = 0;
+                
+                ['breakfast', 'lunch', 'snack', 'dinner'].forEach(mealType => {
+                    const meal = dayPlan.meals[mealType];
+                    if (!meal || !meal.name) return;
+                    
+                    totalCalories += meal.calories;
+                    totalProtein += meal.protein;
+                    
+                    const ingredientsHTML = meal.ingredients.map(ing => `
+                        <li class="flex justify-between text-sm">
+                            <span class="text-gray-700">${ing.name}</span>
+                            <span class="text-gray-600 font-medium">${ing.quantity}</span>
+                        </li>
+                    `).join('');
+                    
+                    contentHTML += `
+                        <div class="py-4 border-b border-gray-200">
+                            <h4 class="text-lg font-semibold text-green-700">${translations[currentLang].mealTypes[mealType]}: ${meal.name}</h4>
+                            <p class="text-sm text-gray-500 mb-3">${meal.calories} kcal, ${meal.protein}g protein (${meal.serving})</p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h5 class="font-semibold text-gray-800" data-lang="recipeIngredients">${translations[currentLang].recipeIngredients}</h5>
+                                    <ul class="mt-2 space-y-1 divide-y divide-gray-100">
+                                        ${ingredientsHTML}
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h5 class="font-semibold text-gray-800" data-lang="recipePreparation">${translations[currentLang].recipePreparation}</h5>
+                                    <p class="mt-2 text-gray-700 whitespace-pre-line text-sm">${meal.recipe}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                const summaryHTML = `
+                    <div class="p-4 bg-gray-100 rounded-lg mb-4">
+                        <h3 class="text-xl font-bold text-gray-900">Total Daily Nutrition (Approx.)</h3>
+                        <div class="flex space-x-6 mt-2">
+                            <span class="text-lg"><strong class="text-green-800">${totalCalories}</strong> kcal</span>
+                            <span class="text-lg"><strong class="text-green-800">${totalProtein}</strong>g protein</span>
+                        </div>
+                    </div>
+                `;
+                
+                recipeModalContent.innerHTML = summaryHTML + contentHTML;
+                openModal(recipeModal);
+            }
+            
+            closeRecipeModal.addEventListener('click', () => closeModal(recipeModal));
+
+            // --- INITIALIZATION ---
+            function init() {
+                // Set default language on load
+                setLanguage(currentLang);
+                
+                // Initialize quiz view
+                updateQuizView();
+            }
+
+            init();
+        });
+    </script>
+
+</body>
+
+</html>
+
